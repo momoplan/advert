@@ -27,7 +27,6 @@ public class NotifyThirdPartyListener {
 	public void notify(@Header("imei") String imei, @Header("platform") String platform, @Header("mac") String mac) {
 		logger.info("通知第三方的jms start "+"imei="+imei+";platform="+platform+";mac="+mac);
 		try {
-			//更新用户信息
 			StringBuilder builder = new StringBuilder(" where");
 			List<Object> params = new ArrayList<Object>();
 			
