@@ -30,11 +30,17 @@ public class NotifyThirdPartyListener {
 			StringBuilder builder = new StringBuilder(" where");
 			List<Object> params = new ArrayList<Object>();
 			
-			builder.append(" o.imei=?");
-			params.add(imei);
+			builder.append(" o.mac=? and");
+			params.add(mac);
+			
+			builder.append(" o.platfrom=?");
+			params.add(Platform.iPhone.value());
 			
 			List<UserInf> list = UserInf.getList(builder.toString(), "", params);
-			if (list!=null&&list.size()>0) {
+			if (list==null||list.size()==0) {
+				logger.error("通知第三方时用户表记录为空,Imei="+imei+",mac="+mac);
+				return ;
+			} else if (list!=null&&list.size()==1) {
 				UserInf userInf = list.get(0);
 				//通知第三方积分墙
 				if (platform!=null&&platform.equals(Platform.iPhone.value())) { //iPhone
@@ -44,7 +50,8 @@ public class NotifyThirdPartyListener {
 					advertiseUtil.notifyThirdParty(advertiseInfo); //通知第三方
 				}
 			} else {
-				logger.error("通知第三方时用户表记录为空,Imei="+imei+",mac="+mac);
+				logger.error("通知第三方时用户表记录大于1,Imei="+imei+",mac="+mac);
+				return ;
 			}
 		} catch (Exception e) {
 			logger.error("通知第三方时发生异常imei="+imei+",mac="+mac, e);
