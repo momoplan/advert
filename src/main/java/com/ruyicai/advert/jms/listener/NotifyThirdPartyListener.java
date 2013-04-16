@@ -42,7 +42,7 @@ public class NotifyThirdPartyListener {
 			params.add(Platform.iPhone.value());
 			
 			List<UserInf> list = UserInf.getList(builder.toString(), " order by o.createtime desc", params);
-			if (list==null||list.size()==0) {
+			if (list==null||list.size()<=0) {
 				logger.error("通知第三方时用户表记录为空,Imei="+imei+",mac="+mac);
 				return ;
 			}
