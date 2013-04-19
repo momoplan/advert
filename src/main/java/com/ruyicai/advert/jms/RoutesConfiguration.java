@@ -22,7 +22,7 @@ public class RoutesConfiguration {
 		advertCamelContext.addRoutes(new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
-				deadLetterChannel("jms:queue:dead").maximumRedeliveries(-1)
+				deadLetterChannel("jmsAdvert:queue:dead").maximumRedeliveries(-1)
 				.redeliveryDelay(3000);
 				from("jmsAdvert:queue:VirtualTopicConsumers.advert.notifyThirdParty").to("bean:notifyThirdPartyListener?method=notify").routeId("请求第三方的通知");
 			}
