@@ -10,7 +10,6 @@ import com.ruyicai.advert.consts.Platform;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.domain.UserInf;
 import com.ruyicai.advert.util.AdvertiseUtil;
-import com.ruyicai.advert.util.StringUtil;
 
 /**
  *  通知第三方的jms
@@ -28,10 +27,6 @@ public class NotifyThirdPartyListener {
 	public void notify(@Header("imei") String imei, @Header("platform") String platform, @Header("mac") String mac) {
 		logger.info("通知第三方的jms start "+"imei="+imei+";platform="+platform+";mac="+mac);
 		try {
-			if (StringUtil.isEmpty(platform)||!platform.equals(Platform.iPhone.value())) {
-		        logger.error("通知第三方时平台不是苹果,Imei=" + imei + ";platform=" + platform + ";mac=" + mac);
-		        return ;
-		    }
 			StringBuilder builder = new StringBuilder(" where");
 			List<Object> params = new ArrayList<Object>();
 			
