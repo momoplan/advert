@@ -10,6 +10,7 @@ import com.ruyicai.advert.consts.Platform;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.domain.UserInf;
 import com.ruyicai.advert.util.AdvertiseUtil;
+import com.ruyicai.advert.util.StringUtil;
 
 /**
  *  通知第三方的jms
@@ -27,6 +28,9 @@ public class NotifyThirdPartyListener {
 	public void notify(@Header("imei") String imei, @Header("platform") String platform, @Header("mac") String mac) {
 		logger.info("通知第三方的jms start "+"imei="+imei+";platform="+platform+";mac="+mac);
 		try {
+			if (StringUtil.isEmpty(mac)) {
+				return ;
+			}
 			StringBuilder builder = new StringBuilder(" where");
 			List<Object> params = new ArrayList<Object>();
 			
@@ -45,6 +49,9 @@ public class NotifyThirdPartyListener {
 			//通知第三方积分墙
 			String channel = userInf.getChannel(); //渠道号
 			String source = advertiseUtil.getSourceByChannel(channel);
+			if (StringUtil.isEmpty(source)) {
+				return ;
+			}
 			AdvertiseInfo advertiseInfo = advertiseUtil.getAdvertiseInfoBySourceAndMac(source, mac);
 			advertiseUtil.notifyThirdParty(advertiseInfo); //通知第三方
 		} catch (Exception e) {
