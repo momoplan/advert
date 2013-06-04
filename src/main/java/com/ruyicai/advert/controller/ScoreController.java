@@ -2,6 +2,7 @@ package com.ruyicai.advert.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -50,15 +51,19 @@ public class ScoreController {
 		try {
 			logger.info("力美积分墙加积分通知 start aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source
 					+";sign="+sign+";timestamp="+timestamp);
-			//记录通知信息
-			ScoreInfo scoreInfo = recordScoreInfo(aduid, uid, aid, point, source, sign, timestamp);
 			//验证sign
 			boolean verfySign = verfySign(aduid, uid, aid, point, source, sign, timestamp);
 			if (!verfySign) {
+				logger.error("签名错误,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				responseJson.put("code", "500");
 				responseJson.put("message", "签名错误");
 				return responseJson.toString();
 			}
+			//将积分(231.0)转成不带小数点
+			NumberFormat nf = NumberFormat.getInstance();
+			point = nf.format(new BigDecimal(point));
+			//记录通知信息
+			ScoreInfo scoreInfo = recordScoreInfo(aduid, uid, aid, point, source, sign, timestamp);
 			//查询用户编号
 			JSONObject userObject = getUserNoByUserName(aid);
 			String userNo = userObject.getString("userNo");
