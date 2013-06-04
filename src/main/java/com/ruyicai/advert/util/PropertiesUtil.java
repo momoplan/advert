@@ -36,4 +36,10 @@ public class PropertiesUtil {
 		return domob_notifyUrl;
 	}
 	
+	@Value("${lotteryUrl}")
+	private String lotteryUrl;
+	public String getLotteryUrl() {
+		return lotteryUrl;
+	}
+	
 }

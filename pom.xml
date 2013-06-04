@@ -631,6 +631,7 @@
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
+				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
 
@@ -650,6 +651,7 @@
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
+				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
 
@@ -669,6 +671,7 @@
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
+				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>
 			</properties>
 		</profile>
 	</profiles>

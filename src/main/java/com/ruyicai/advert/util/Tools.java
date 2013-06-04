@@ -2,7 +2,10 @@ package com.ruyicai.advert.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import org.apache.log4j.Logger;
+import sun.misc.BASE64Encoder;
 
 /**
  * 工具类
@@ -41,5 +44,26 @@ public class Tools {
 		}
 		return result;
 	}
+	
+	/**
+	 * hmac-sha1 加密模式
+	 * @param data
+	 * @param key
+	 * @return
+	 */
+	public static String hmac(String data, String key) {
+		byte[] byteHMAC = null;
+		try {
+			Mac mac = Mac.getInstance("HmacSHA1");
+			SecretKeySpec spec = new SecretKeySpec(key.getBytes(), "HmacSHA1");
+			mac.init(spec);
+			byteHMAC = mac.doFinal(data.getBytes());
+		} catch (Exception e) {
+			logger.error("error", e);
+		}
+		String oauth = new BASE64Encoder().encode(byteHMAC);
+		return oauth;
+	}
+
 
 }
