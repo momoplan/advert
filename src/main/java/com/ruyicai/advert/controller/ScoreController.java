@@ -51,6 +51,13 @@ public class ScoreController {
 		try {
 			logger.info("力美积分墙加积分通知 start aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source
 					+";sign="+sign+";timestamp="+timestamp);
+			//验证用户名是否为空
+			if (StringUtils.isBlank(aid)) {
+				logger.error("用户名为空,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+				responseJson.put("code", "500");
+				responseJson.put("message", "用户名为空");
+				return responseJson.toString();
+			}
 			//验证sign
 			boolean verfySign = verfySign(aduid, uid, aid, point, source, sign, timestamp);
 			if (!verfySign) {
