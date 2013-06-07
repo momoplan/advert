@@ -1,6 +1,5 @@
 package com.ruyicai.advert.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -53,9 +52,9 @@ public class ScoreController {
 					+";sign="+sign+";timestamp="+timestamp);
 			//验证用户名是否为空
 			if (StringUtils.isBlank(aid)) {
-				logger.error("用户名为空,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+				logger.error("aid为空,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				responseJson.put("code", "500");
-				responseJson.put("message", "用户名为空");
+				responseJson.put("message", "aid为空");
 				return responseJson.toString();
 			}
 			//验证sign
@@ -72,12 +71,12 @@ public class ScoreController {
 			//记录通知信息
 			ScoreInfo scoreInfo = recordScoreInfo(aduid, uid, aid, point, source, sign, timestamp);
 			//查询用户编号
-			JSONObject userObject = getUserNoByUserName(aid);
+			JSONObject userObject = getUserByUserNo(aid);
 			String userNo = userObject.getString("userNo");
 			String channel = userObject.getString("channel");
 			if (StringUtils.isBlank(userNo)) {
 				responseJson.put("code", "500");
-				responseJson.put("message", "用户名不存在");
+				responseJson.put("message", "用户不存在");
 				return responseJson.toString();
 			}
 			//送彩金
@@ -124,11 +123,49 @@ public class ScoreController {
 	}
 	
 	/**
+	 * 根据用户编号查询用户
+	 * @param userNo
+	 * @return
+	 */
+	private JSONObject getUserByUserNo(String userNo) {
+		JSONObject resultObject = new JSONObject();
+		try {
+			String result = lotteryService.getUserByUserNo(userNo);
+			if (StringUtils.isBlank(result)) {
+				resultObject.put("userNo", "");
+				resultObject.put("channel", "");
+				return resultObject;
+			}
+			JSONObject fromObject = JSONObject.fromObject(result);
+			if (fromObject==null) {
+				resultObject.put("userNo", "");
+				resultObject.put("channel", "");
+				return resultObject;
+			}
+			String errorCode = fromObject.getString("errorCode");
+			if (!StringUtils.equals(errorCode, "0")) {
+				resultObject.put("userNo", "");
+				resultObject.put("channel", "");
+				return resultObject;
+			}
+			JSONObject valueJsonObject = fromObject.getJSONObject("value");
+			resultObject.put("userNo", valueJsonObject.getString("userno"));
+			resultObject.put("channel", valueJsonObject.getString("channel"));
+			return resultObject;
+		} catch (Exception e) {
+			logger.error("根据用户编号查询用户发生异常", e);
+		}
+		resultObject.put("userNo", "");
+		resultObject.put("channel", "");
+		return resultObject;
+	}
+	
+	/**
 	 * 根据用户名查询用户编号
 	 * @param userName
 	 * @return
 	 */
-	private JSONObject getUserNoByUserName(String userName) {
+	/*private JSONObject getUserNoByUserName(String userName) {
 		JSONObject resultObject = new JSONObject();
 		try {
 			String result = lotteryService.queryUsersByUserName(userName);
@@ -159,7 +196,7 @@ public class ScoreController {
 		resultObject.put("userNo", "");
 		resultObject.put("channel", "");
 		return resultObject;
-	}
+	}*/
 	
 	/**
 	 * 赠送彩金
@@ -187,7 +224,6 @@ public class ScoreController {
 	private void updateScoreInfo(ScoreInfo scoreInfo, String userNo) {
 		try {
 			scoreInfo.setState("0");
-			scoreInfo.setUserno(userNo);
 			scoreInfo.setUpdatetime(new Date());
 			scoreInfo.merge();
 		} catch (Exception e) {

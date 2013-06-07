@@ -98,12 +98,4 @@ privileged aspect ScoreInfo_Roo_JavaBean {
         this.updatetime = updatetime;
     }
     
-    public String ScoreInfo.getUserno() {
-        return this.userno;
-    }
-    
-    public void ScoreInfo.setUserno(String userno) {
-        this.userno = userno;
-    }
-    
 }

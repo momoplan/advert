@@ -1,7 +1,6 @@
 package com.ruyicai.advert.service;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,30 @@ public class LotteryService {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public String queryUsersByUserName(String userName) throws UnsupportedEncodingException {
+	/*public String queryUsersByUserName(String userName) throws UnsupportedEncodingException {
 		StringBuffer paramStr = new StringBuffer();
 		paramStr.append("userName=" + URLEncoder.encode(userName, "UTF-8"));
 
 		String url = propertiesUtil.getLotteryUrl() + "tuserinfoes?json&find=ByUserName";
 		String result = HttpUtil.sendRequestByPost(url, paramStr.toString(), true);
 		//logger.info("根据用户名查询用户返回:"+result+",paramStr:"+paramStr.toString());
+		return result;
+	}*/
+	
+	/**
+	 * 根据用户编号查询用户
+	 * 
+	 * @param mobileid
+	 * @return
+	 * @throws IOException
+	 */
+	public String getUserByUserNo(String userNo) {
+		StringBuffer paramStr = new StringBuffer();
+		paramStr.append("userno=" + userNo);
+
+		String url = propertiesUtil.getLotteryUrl() + "tuserinfoes?json&find=ByUserno";
+		String result = HttpUtil.sendRequestByPost(url, paramStr.toString(), true);
+		logger.info("根据用户编号查询用户是否存在返回:"+result+",paramStr:"+paramStr.toString());
 		return result;
 	}
 	

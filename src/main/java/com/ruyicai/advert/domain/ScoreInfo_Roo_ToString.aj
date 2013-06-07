@@ -19,8 +19,7 @@ privileged aspect ScoreInfo_Roo_ToString {
         sb.append("State: ").append(getState()).append(", ");
         sb.append("Timestamp: ").append(getTimestamp()).append(", ");
         sb.append("Uid: ").append(getUid()).append(", ");
-        sb.append("Updatetime: ").append(getUpdatetime()).append(", ");
-        sb.append("Userno: ").append(getUserno());
+        sb.append("Updatetime: ").append(getUpdatetime());
         return sb.toString();
     }
     

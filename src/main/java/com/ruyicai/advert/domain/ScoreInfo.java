@@ -56,7 +56,4 @@ public class ScoreInfo {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatetime;
 	
-	@Column(name = "userno")
-	private String userno;
-	
 }
