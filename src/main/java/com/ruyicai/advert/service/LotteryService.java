@@ -57,13 +57,14 @@ public class LotteryService {
 	 * @param amount
 	 * @return
 	 */
-	public String presentDividend(String userNo, String amount, String channel) {
+	public String presentDividend(String userNo, String amount, String channel, String memo) {
 		StringBuffer paramStr = new StringBuffer();
 		paramStr.append("userno=" + userNo);
 		paramStr.append("&amt=" + amount);
 		paramStr.append("&accesstype=" + Constants.accessType);
 		paramStr.append("&subchannel=" + Constants.subChannel);
 		paramStr.append("&channel=" + channel);
+		paramStr.append("&memo=" + memo);
 		
 		String url = propertiesUtil.getLotteryUrl() + "taccounts/doDirectChargeProcess";
 		String result = HttpUtil.sendRequestByPost(url, paramStr.toString(), true);

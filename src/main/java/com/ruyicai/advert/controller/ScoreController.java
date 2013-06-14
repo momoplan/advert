@@ -80,7 +80,7 @@ public class ScoreController {
 				return responseJson.toString();
 			}
 			//送彩金
-			String errorCode = presentDividend(userNo, point, channel);
+			String errorCode = presentDividend(userNo, point, channel, "力美免费彩金");
 			if (StringUtils.equals(errorCode, "0")) { //赠送成功
 				//更新积分记录的状态
 				updateScoreInfo(scoreInfo, userNo);
@@ -204,8 +204,8 @@ public class ScoreController {
 	 * @param point
 	 * @return
 	 */
-	private String presentDividend(String userNo, String point, String channel) {
-		String result = lotteryService.presentDividend(userNo, point, channel);
+	private String presentDividend(String userNo, String point, String channel, String memo) {
+		String result = lotteryService.presentDividend(userNo, point, channel, memo);
 		if (StringUtils.isBlank(result)) {
 			return "";
 		}
