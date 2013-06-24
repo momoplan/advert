@@ -624,8 +624,8 @@
 				<database.driverClassName>com.mysql.jdbc.Driver</database.driverClassName>
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
-				<jms.advert.brokerURL>tcp://192.168.0.42:61616</jms.advert.brokerURL>
-				<camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort>
+				<jms.brokerURL>tcp://192.168.0.42:61616</jms.brokerURL>
+				<!-- <camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort> -->
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
@@ -644,8 +644,8 @@
 				<database.driverClassName>com.mysql.jdbc.Driver</database.driverClassName>
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
-				<jms.advert.brokerURL>tcp://192.168.0.42:61616</jms.advert.brokerURL>
-				<camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort>
+				<jms.brokerURL>tcp://192.168.0.42:61616</jms.brokerURL>
+				<!-- <camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort> -->
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
@@ -664,8 +664,8 @@
 				<database.driverClassName>com.mysql.jdbc.Driver</database.driverClassName>
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
-				<jms.advert.brokerURL>failover://(tcp://192.168.99.16:61616,tcp://192.168.99.17:61616)?randomize=false</jms.advert.brokerURL>
-				<camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort>
+				<jms.brokerURL>failover://(tcp://192.168.99.16:61616,tcp://192.168.99.17:61616)?randomize=false</jms.brokerURL>
+				<!-- <camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort> -->
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>

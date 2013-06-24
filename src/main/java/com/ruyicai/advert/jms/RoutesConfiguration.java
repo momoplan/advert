@@ -13,19 +13,25 @@ public class RoutesConfiguration {
 	
 	private Logger logger = LoggerFactory.getLogger(RoutesConfiguration.class);
 
-	@Resource(name="advertCamelContext")
-	private CamelContext advertCamelContext;
+	@Resource(name="camelContext")
+	private CamelContext camelContext;
 	
 	@PostConstruct
-	public void init() throws Exception{
-		logger.info("init advertCamel routes");
-		advertCamelContext.addRoutes(new RouteBuilder() {
-			@Override
-			public void configure() throws Exception {
-				deadLetterChannel("jmsAdvert:queue:dead").maximumRedeliveries(-1)
-				.redeliveryDelay(3000);
-				from("jmsAdvert:queue:VirtualTopicConsumers.advert.notifyThirdParty").to("bean:notifyThirdPartyListener?method=notify").routeId("请求第三方的通知");
-			}
-		});
+	public void init() {
+		try {
+			logger.info("init advert camel routes");
+			camelContext.addRoutes(new RouteBuilder() {
+				@Override
+				public void configure() throws Exception {
+					deadLetterChannel("jms:queue:dead").maximumRedeliveries(-1)
+					.redeliveryDelay(3000);
+					from("jms:queue:VirtualTopicConsumers.advert.notifyThirdParty?concurrentConsumers=5").to(
+							"bean:notifyThirdPartyListener?method=notify").routeId("请求第三方的通知");
+				}
+			});
+		} catch (Exception e) {
+			logger.error("advert camel context start failed", e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }
