@@ -6,6 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PropertiesUtil {
 
+	@Value("${limei.ip}")
+	private String limei_ip;
+	public String getLimei_ip() {
+		return limei_ip;
+	}
+	
 	@Value("${limei.notifyUrl}")
 	private String limei_notifyUrl;
 	public String getLimei_notifyUrl() {

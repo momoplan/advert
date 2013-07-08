@@ -2,7 +2,12 @@ package com.ruyicai.advert.controller;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruyicai.advert.consts.Constants;
 import com.ruyicai.advert.domain.ScoreInfo;
 import com.ruyicai.advert.service.LotteryService;
+import com.ruyicai.advert.util.PropertiesUtil;
 import com.ruyicai.advert.util.Tools;
 
 /**
@@ -30,6 +36,9 @@ public class ScoreController {
 	
 	@Autowired
 	private LotteryService lotteryService;
+	
+	@Autowired
+	private PropertiesUtil propertiesUtil;
 
 	/**
 	 * 力美积分墙加积分通知
@@ -43,13 +52,21 @@ public class ScoreController {
 	 * @return
 	 */
 	@RequestMapping(value = "/limeiNotify", method = RequestMethod.GET)
-	public @ResponseBody String limeiNotify(@RequestParam("aduid") String aduid, @RequestParam("uid") String uid,
-			@RequestParam("aid") String aid, @RequestParam("point") String point, @RequestParam("source") String source,
-			@RequestParam("sign") String sign, @RequestParam("timestamp") String timestamp) {
+	public @ResponseBody String limeiNotify(HttpServletRequest request, @RequestParam("aduid") String aduid, 
+			@RequestParam("uid") String uid, @RequestParam("aid") String aid, @RequestParam("point") String point, 
+			@RequestParam("source") String source, @RequestParam("sign") String sign, @RequestParam("timestamp") String timestamp) {
 		JSONObject responseJson = new JSONObject();
 		try {
+			String ip = request.getHeader("X-Forwarded-For");
 			logger.info("力美积分墙加积分通知 start aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source
-					+";sign="+sign+";timestamp="+timestamp);
+					+";sign="+sign+";timestamp="+timestamp+";ip="+ip);
+			//验证ip
+			if (!verfyIp(ip)) {
+				logger.error("ip不合法,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source+";ip="+ip);
+				responseJson.put("code", "500");
+				responseJson.put("message", "ip不合法");
+				return responseJson.toString();
+			}
 			//验证用户名是否为空
 			if (StringUtils.isBlank(aid)) {
 				logger.error("aid为空,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
@@ -260,5 +277,35 @@ public class ScoreController {
 		}
 		return false;
 	}
+	
+	/**
+	 * 验证ip是否合法
+	 * @param ip
+	 * @return
+	 */
+	private boolean verfyIp(String ip) {
+		if (StringUtils.isBlank(ip)) {
+			return false;
+		}
+		String[] ips = StringUtils.split(ip, ",");
+		String[] limeiIps = StringUtils.split(propertiesUtil.getLimei_ip(), ",");
+		List<String> limeiIpList = Arrays.asList(limeiIps);
+		for (String p : ips) {
+			if (StringUtils.isNotBlank(p)&&limeiIpList.contains(p.trim())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/*public static void main(String[] args) {
+		String ip = "10.45.6.25, 61.130.246.68";
+		String[] ips = StringUtils.split(ip, ",");
+		for (String string : ips) {
+			System.out.println(string);
+		}
+		boolean verfyIp = new ScoreController().verfyIp("10.45.6.25, 61.130.246.68");
+		System.out.println(verfyIp);
+	}*/
 	
 }
