@@ -2,12 +2,11 @@ package com.ruyicai.advert.controller;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -63,24 +62,23 @@ public class ScoreController {
 			//验证ip
 			if (!verfyIp(ip)) {
 				logger.error("ip不合法,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source+";ip="+ip);
-				responseJson.put("code", "500");
-				responseJson.put("message", "ip不合法");
-				return responseJson.toString();
+				return response(responseJson, "500", "ip不合法");
 			}
 			//验证用户名是否为空
 			if (StringUtils.isBlank(aid)) {
 				logger.error("aid为空,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
-				responseJson.put("code", "500");
-				responseJson.put("message", "aid为空");
-				return responseJson.toString();
+				return response(responseJson, "500", "aid为空");
 			}
 			//验证sign
 			boolean verfySign = verfySign(aduid, uid, aid, point, source, sign, timestamp);
 			if (!verfySign) {
 				logger.error("签名错误,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
-				responseJson.put("code", "500");
-				responseJson.put("message", "签名错误");
-				return responseJson.toString();
+				return response(responseJson, "500", "签名错误");
+			}
+			//判断重复请求
+			if (!verifyRepeatRequest(sign)) {
+				logger.error("重复请求,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+				return response(responseJson, "500", "重复请求");
 			}
 			//将积分(231.0)转成不带小数点
 			NumberFormat nf = NumberFormat.getInstance();
@@ -92,26 +90,19 @@ public class ScoreController {
 			String userNo = userObject.getString("userNo");
 			String channel = userObject.getString("channel");
 			if (StringUtils.isBlank(userNo)) {
-				responseJson.put("code", "500");
-				responseJson.put("message", "用户不存在");
-				return responseJson.toString();
+				return response(responseJson, "500", "用户不存在");
 			}
 			//送彩金
 			String errorCode = presentDividend(userNo, point, channel, "力美免费彩金");
 			if (StringUtils.equals(errorCode, "0")) { //赠送成功
 				//更新积分记录的状态
 				updateScoreInfo(scoreInfo, userNo);
-				
-				responseJson.put("code", "200");
-				responseJson.put("message", "赠送成功");
-				return responseJson.toString();
+				return response(responseJson, "200", "赠送成功");
 			}
 		} catch (Exception e) {
 			logger.error("力美积分墙加积分通知发生异常", e);
 		}
-		responseJson.put("code", "500");
-		responseJson.put("message", "赠送失败");
-		return responseJson.toString();
+		return response(responseJson, "500", "赠送失败");
 	}
 	
 	/**
@@ -176,44 +167,6 @@ public class ScoreController {
 		resultObject.put("channel", "");
 		return resultObject;
 	}
-	
-	/**
-	 * 根据用户名查询用户编号
-	 * @param userName
-	 * @return
-	 */
-	/*private JSONObject getUserNoByUserName(String userName) {
-		JSONObject resultObject = new JSONObject();
-		try {
-			String result = lotteryService.queryUsersByUserName(userName);
-			if (StringUtils.isBlank(result)) {
-				resultObject.put("userNo", "");
-				resultObject.put("channel", "");
-				return resultObject;
-			}
-			JSONObject fromObject = JSONObject.fromObject(result);
-			if (fromObject==null) {
-				resultObject.put("userNo", "");
-				resultObject.put("channel", "");
-				return resultObject;
-			}
-			String errorCode = fromObject.getString("errorCode");
-			if (!StringUtils.equals(errorCode, "0")) {
-				resultObject.put("userNo", "");
-				resultObject.put("channel", "");
-				return resultObject;
-			}
-			JSONObject valueJsonObject = fromObject.getJSONObject("value");
-			resultObject.put("userNo", valueJsonObject.getString("userno"));
-			resultObject.put("channel", valueJsonObject.getString("channel"));
-			return resultObject;
-		} catch (UnsupportedEncodingException e) {
-			logger.error("根据用户名查询用户编号发生异常", e);
-		}
-		resultObject.put("userNo", "");
-		resultObject.put("channel", "");
-		return resultObject;
-	}*/
 	
 	/**
 	 * 赠送彩金
@@ -298,14 +251,40 @@ public class ScoreController {
 		return false;
 	}
 	
-	/*public static void main(String[] args) {
-		String ip = "10.45.6.25, 61.130.246.68";
-		String[] ips = StringUtils.split(ip, ",");
-		for (String string : ips) {
-			System.out.println(string);
+	/**
+	 * 验证重复请求
+	 * @param sign
+	 * @return
+	 */
+	private boolean verifyRepeatRequest(String sign) {
+		try {
+			StringBuilder builder = new StringBuilder(" where");
+			List<Object> params = new ArrayList<Object>();
+			
+			builder.append(" o.sign=? ");
+			params.add(sign);
+			
+			List<ScoreInfo> list = ScoreInfo.getList(builder.toString(), "", params);
+			if (list!=null&&list.size()>0) {
+				return false;
+			}
+			return true;
+		} catch (Exception e) {
+			logger.error("积分墙积分验证重复请求发生异常", e);
 		}
-		boolean verfyIp = new ScoreController().verfyIp("10.45.6.25, 61.130.246.68");
-		System.out.println(verfyIp);
-	}*/
+		return false;
+	}
+	
+	/**
+	 * 请求响应
+	 * @param responseJson
+	 * @param errorCode
+	 * @param message
+	 */
+	private String response(JSONObject responseJson, String errorCode, String message) {
+		responseJson.put("code", errorCode);
+		responseJson.put("message", message);
+		return responseJson.toString();
+	}
 	
 }

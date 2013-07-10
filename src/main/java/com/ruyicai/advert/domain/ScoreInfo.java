@@ -2,12 +2,16 @@ package com.ruyicai.advert.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
+
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.json.RooJson;
@@ -55,5 +59,18 @@ public class ScoreInfo {
 	@Column(name = "updatetime")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatetime;
+	
+	public static List<ScoreInfo> getList(String where, String orderby, List<Object> params) {
+		TypedQuery<ScoreInfo> q = entityManager().createQuery(
+				"SELECT o FROM ScoreInfo o " + where + orderby, ScoreInfo.class);
+		if (null != params && !params.isEmpty()) {
+			int index = 1;
+			for (Object param : params) {
+				q.setParameter(index, param);
+				index = index + 1;
+			}
+		}
+		return q.getResultList();
+	}
 	
 }
