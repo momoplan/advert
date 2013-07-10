@@ -261,8 +261,10 @@ public class ScoreController {
 			StringBuilder builder = new StringBuilder(" where");
 			List<Object> params = new ArrayList<Object>();
 			
-			builder.append(" o.sign=? ");
+			builder.append(" o.sign=? and");
 			params.add(sign);
+			
+			builder.append(" o.state='0'");
 			
 			List<ScoreInfo> list = ScoreInfo.getList(builder.toString(), "", params);
 			if (list!=null&&list.size()>0) {
