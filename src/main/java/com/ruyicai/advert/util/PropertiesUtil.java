@@ -30,6 +30,12 @@ public class PropertiesUtil {
 		return dianjoy_notifyUrl;
 	}
 	
+	@Value("${dianru.ip}")
+	private String dianru_ip;
+	public String getDianru_ip() {
+		return dianru_ip;
+	}
+	
 	@Value("${dianru.notifyUrl}")
 	private String dianru_notifyUrl;
 	public String getDianru_notifyUrl() {

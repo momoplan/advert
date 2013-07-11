@@ -630,6 +630,7 @@
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
+				<dianru.ip>117.79.228.87</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
@@ -651,6 +652,7 @@
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
+				<dianru.ip>117.79.228.87</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
@@ -672,6 +674,7 @@
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
+				<dianru.ip>117.79.228.87</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>

@@ -3,16 +3,22 @@ package com.ruyicai.advert.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruyicai.advert.domain.AdvertiseInfo;
+import com.ruyicai.advert.util.PropertiesUtil;
 import com.ruyicai.advert.util.StringUtil;
+import com.ruyicai.advert.util.VerifyUtil;
 
 /**
  * 广告点击记录Controller
@@ -25,6 +31,9 @@ public class AdvertiseController {
 
 	private Logger logger = Logger.getLogger(AdvertiseController.class);
 	
+	@Autowired
+	private PropertiesUtil propertiesUtil;
+	
 	/**
 	 * 力美广告
 	 * @param mac
@@ -33,11 +42,14 @@ public class AdvertiseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/limeiNotify", method = RequestMethod.GET)
-	public @ResponseBody String limeiNotify(@RequestParam("mac") String mac, @RequestParam("appId") String appId,
-			@RequestParam("source") String source) {
+	public @ResponseBody String limeiNotify(HttpServletRequest request, @RequestParam("mac") String mac, 
+			@RequestParam("appId") String appId, @RequestParam("source") String source) {
 		JSONObject responseJson = new JSONObject();
 		try {
-			logger.info("力美广告点击记录 start mac="+mac+";appId="+appId+";source="+source);
+			String ip = request.getHeader("X-Forwarded-For");
+			logger.info("力美广告点击记录 start mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
+			//验证ip
+			
 			//将mac(28E02CE34713)地址加上":"(力美的mac格式:不加密,不带分隔符,大写)
 			if (StringUtils.isNotBlank(mac)) {
 				//mac = StringUtil.joinStringArrayWithCharacter(StringUtil.getStringArrayFromString(mac, 2), ":");
@@ -65,10 +77,19 @@ public class AdvertiseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/dianruNotify", method = RequestMethod.GET)
-	public @ResponseBody String dianruNotify(@RequestParam("drkey") String drkey, @RequestParam("source") String source) {
+	public @ResponseBody String dianruNotify(HttpServletRequest request, @RequestParam("drkey") String drkey, 
+			@RequestParam("source") String source) {
 		JSONObject responseJson = new JSONObject();
 		try {
-			logger.info("点入广告点击记录 start drkey="+drkey+";source="+source);
+			String ip = request.getHeader("X-Forwarded-For");
+			logger.info("点入广告点击记录 start drkey="+drkey+";source="+source+";ip="+ip);
+			//验证ip
+			boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getDianru_ip());
+			if (!verfyIp) {
+				logger.error("点入广告点击记录,ip不合法 drkey="+drkey+";source="+source+";ip="+ip);
+				return responseSuccess(responseJson, false, "ip不合法");
+			}
+			//验证参数
 			if (StringUtils.isBlank(drkey) || drkey.length()<32) {
 				return responseSuccess(responseJson, false, "参数错误");
 			}
