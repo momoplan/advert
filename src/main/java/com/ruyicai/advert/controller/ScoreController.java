@@ -31,7 +31,7 @@ import com.ruyicai.advert.util.VerifyUtil;
 @Controller
 public class ScoreController {
 
-	private Logger logger = Logger.getLogger(AdvertiseController.class);
+	private Logger logger = Logger.getLogger(ScoreController.class);
 	
 	@Autowired
 	private LotteryService lotteryService;
