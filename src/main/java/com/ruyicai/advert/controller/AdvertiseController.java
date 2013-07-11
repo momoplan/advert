@@ -59,34 +59,6 @@ public class AdvertiseController {
 	}
 	
 	/**
-	 * 点乐广告
-	 * @param mac
-	 * @param advertiseId
-	 * @param source
-	 * @return
-	 */
-	@RequestMapping(value = "/notify", method = RequestMethod.GET)
-	public @ResponseBody String notify(@RequestParam("mac") String mac, @RequestParam("ad_id") String advertiseId,
-			@RequestParam("source") String source) {
-		JSONObject responseJson = new JSONObject();
-		try {
-			logger.info("点乐广告点击记录 start mac="+mac+";advertiseId="+advertiseId+";source="+source);
-			List<AdvertiseInfo> list = getAdvertiseInfoListByAdvertiseId(mac, advertiseId, source);
-			if (list==null||list.size()==0) {
-				//保存记录
-				saveAdvertiseInfoByAdvertiseId(mac, advertiseId, source);
-				return responseErrorCode(responseJson, "0000", "通知成功");
-			} else {
-				return responseErrorCode(responseJson, "9999", "重复记录");
-			}
-		} catch (Exception e) {
-			logger.error("点乐广告点击记录发生异常", e);
-		}
-		//logger.info("点乐广告点击记录 end mac="+mac+";advertiseId="+advertiseId+";source="+source+",result="+responseJson.toString());
-		return responseErrorCode(responseJson, "9999", "通知失败");
-	}
-	
-	/**
 	 * 点入广告
 	 * @param drkey
 	 * @param source
@@ -145,6 +117,34 @@ public class AdvertiseController {
 	}
 	
 	/**
+	 * 点乐广告
+	 * @param mac
+	 * @param advertiseId
+	 * @param source
+	 * @return
+	 */
+	/*@RequestMapping(value = "/notify", method = RequestMethod.GET)
+	public @ResponseBody String notify(@RequestParam("mac") String mac, @RequestParam("ad_id") String advertiseId,
+			@RequestParam("source") String source) {
+		JSONObject responseJson = new JSONObject();
+		try {
+			logger.info("点乐广告点击记录 start mac="+mac+";advertiseId="+advertiseId+";source="+source);
+			List<AdvertiseInfo> list = getAdvertiseInfoListByAdvertiseId(mac, advertiseId, source);
+			if (list==null||list.size()==0) {
+				//保存记录
+				saveAdvertiseInfoByAdvertiseId(mac, advertiseId, source);
+				return responseErrorCode(responseJson, "0000", "通知成功");
+			} else {
+				return responseErrorCode(responseJson, "9999", "重复记录");
+			}
+		} catch (Exception e) {
+			logger.error("点乐广告点击记录发生异常", e);
+		}
+		//logger.info("点乐广告点击记录 end mac="+mac+";advertiseId="+advertiseId+";source="+source+",result="+responseJson.toString());
+		return responseErrorCode(responseJson, "9999", "通知失败");
+	}*/
+	
+	/**
 	 * 请求响应(success)
 	 * @param responseJson
 	 * @param success
@@ -164,11 +164,11 @@ public class AdvertiseController {
 	 * @param message
 	 * @return
 	 */
-	private String responseErrorCode(JSONObject responseJson, String errorCode, String message) {
+	/*private String responseErrorCode(JSONObject responseJson, String errorCode, String message) {
 		responseJson.put("error_code", errorCode);
 		responseJson.put("message", message);
 		return responseJson.toString();
-	}
+	}*/
 	
 	/**
 	 * 根据appId查询广告记录
@@ -201,7 +201,7 @@ public class AdvertiseController {
 	 * @param source
 	 * @return
 	 */
-	private List<AdvertiseInfo> getAdvertiseInfoListByAdvertiseId(String mac, String advertiseId, String source) {
+	/*private List<AdvertiseInfo> getAdvertiseInfoListByAdvertiseId(String mac, String advertiseId, String source) {
 		StringBuilder builder = new StringBuilder(" where");
 		List<Object> params = new ArrayList<Object>();
 		
@@ -216,7 +216,7 @@ public class AdvertiseController {
 		
 		List<AdvertiseInfo> list = AdvertiseInfo.getList(builder.toString(), "", params);
 		return list;
-	}
+	}*/
 	
 	/**
 	 * 根据drkey查询广告记录
@@ -265,7 +265,7 @@ public class AdvertiseController {
 	 * @param advertiseId
 	 * @param source
 	 */
-	private void saveAdvertiseInfoByAdvertiseId(String mac, String advertiseId, String source) {
+	/*private void saveAdvertiseInfoByAdvertiseId(String mac, String advertiseId, String source) {
 		AdvertiseInfo advertiseInfo = new AdvertiseInfo();
 		advertiseInfo.setMac(mac);
 		advertiseInfo.setAdvertiseid(advertiseId);
@@ -274,7 +274,7 @@ public class AdvertiseController {
 		advertiseInfo.setUpdatetime(new Date());
 		advertiseInfo.setState("1");
 		advertiseInfo.persist();
-	}
+	}*/
 	
 	/**
 	 * 根据drkey保存广告记录
