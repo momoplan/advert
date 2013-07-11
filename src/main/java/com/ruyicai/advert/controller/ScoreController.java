@@ -3,7 +3,6 @@ package com.ruyicai.advert.controller;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +20,7 @@ import com.ruyicai.advert.domain.ScoreInfo;
 import com.ruyicai.advert.service.LotteryService;
 import com.ruyicai.advert.util.PropertiesUtil;
 import com.ruyicai.advert.util.Tools;
+import com.ruyicai.advert.util.VerifyUtil;
 
 /**
  * 积分墙积分Controller
@@ -60,8 +60,9 @@ public class ScoreController {
 			logger.info("力美积分墙加积分通知 start aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source
 					+";sign="+sign+";timestamp="+timestamp+";ip="+ip);
 			//验证ip
-			if (!verfyIp(ip)) {
-				logger.error("ip不合法,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source+";ip="+ip);
+			boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getLimei_ip());
+			if (!verfyIp) {
+				logger.error("积分墙加积分,ip不合法,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source+";ip="+ip);
 				return response(responseJson, "500", "ip不合法");
 			}
 			//验证用户名是否为空
@@ -236,7 +237,7 @@ public class ScoreController {
 	 * @param ip
 	 * @return
 	 */
-	private boolean verfyIp(String ip) {
+	/*private boolean verfyIp(String ip) {
 		if (StringUtils.isBlank(ip)) {
 			return false;
 		}
@@ -249,7 +250,7 @@ public class ScoreController {
 			}
 		}
 		return false;
-	}
+	}*/
 	
 	/**
 	 * 验证重复请求

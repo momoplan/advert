@@ -168,43 +168,6 @@ public class AdvertiseUtil {
 	}
 	
 	/**
-	 * 点乐通知
-	 * @param advertiseInfo
-	 * @param imei
-	 */
-	public void dianjoyNotify(AdvertiseInfo advertiseInfo) {
-		String adMac = advertiseInfo.getMac(); //广告传过来的mac地址
-		String advertiseId = advertiseInfo.getAdvertiseid(); //广告id
-		
-		String salt = propertiesUtil.getDianjoy_salt(); //表示两个服务器之间约定的一个0-32 位的字符串
-		String token = Tools.md5(salt+advertiseId+adMac); //加密串
-		
-		String result = "";
-		int requestCount = 1;
-		while (StringUtil.isEmpty(result) && requestCount<4) {
-			String url = propertiesUtil.getDianjoy_notifyUrl()+"?device_id="+adMac+"&ad_id="+advertiseId+"&token="+token;
-			result = HttpUtil.sendRequestByGet(url, true);
-			logger.info("广告通知点乐返回:"+result+";mac="+adMac+";requestCount="+requestCount);
-			if (!StringUtil.isEmpty(result)) {
-				JSONObject fromObject = JSONObject.fromObject(result);
-				if (fromObject!=null) {
-					String status = fromObject.getString("status");
-					if (status!=null&&status.equals("1")) { //成功
-						updateAdvertiseInfoState(advertiseInfo); //更新AdvertiseInfo表的状态
-					}
-				}
-			} else {
-				requestCount++;
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	/**
 	 * 点入通知
 	 * @param advertiseInfo
 	 */
@@ -264,6 +227,43 @@ public class AdvertiseUtil {
 			}
 		}
 	}
+	
+	/**
+	 * 点乐通知
+	 * @param advertiseInfo
+	 * @param imei
+	 */
+	/*public void dianjoyNotify(AdvertiseInfo advertiseInfo) {
+		String adMac = advertiseInfo.getMac(); //广告传过来的mac地址
+		String advertiseId = advertiseInfo.getAdvertiseid(); //广告id
+		
+		String salt = propertiesUtil.getDianjoy_salt(); //表示两个服务器之间约定的一个0-32 位的字符串
+		String token = Tools.md5(salt+advertiseId+adMac); //加密串
+		
+		String result = "";
+		int requestCount = 1;
+		while (StringUtil.isEmpty(result) && requestCount<4) {
+			String url = propertiesUtil.getDianjoy_notifyUrl()+"?device_id="+adMac+"&ad_id="+advertiseId+"&token="+token;
+			result = HttpUtil.sendRequestByGet(url, true);
+			logger.info("广告通知点乐返回:"+result+";mac="+adMac+";requestCount="+requestCount);
+			if (!StringUtil.isEmpty(result)) {
+				JSONObject fromObject = JSONObject.fromObject(result);
+				if (fromObject!=null) {
+					String status = fromObject.getString("status");
+					if (status!=null&&status.equals("1")) { //成功
+						updateAdvertiseInfoState(advertiseInfo); //更新AdvertiseInfo表的状态
+					}
+				}
+			} else {
+				requestCount++;
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}*/
 	
 	/**
 	 * 更新AdvertiseInfo的状态
