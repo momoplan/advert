@@ -18,23 +18,6 @@ public class LotteryService {
 	private PropertiesUtil propertiesUtil;
 	
 	/**
-	 * 根据用户名查询用户
-	 * 
-	 * @param mobileid
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	/*public String queryUsersByUserName(String userName) throws UnsupportedEncodingException {
-		StringBuffer paramStr = new StringBuffer();
-		paramStr.append("userName=" + URLEncoder.encode(userName, "UTF-8"));
-
-		String url = propertiesUtil.getLotteryUrl() + "tuserinfoes?json&find=ByUserName";
-		String result = HttpUtil.sendRequestByPost(url, paramStr.toString(), true);
-		//logger.info("根据用户名查询用户返回:"+result+",paramStr:"+paramStr.toString());
-		return result;
-	}*/
-	
-	/**
 	 * 根据用户编号查询用户
 	 * 
 	 * @param mobileid
