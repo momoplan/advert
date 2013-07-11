@@ -3,9 +3,7 @@ package com.ruyicai.advert.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -49,7 +47,11 @@ public class AdvertiseController {
 			String ip = request.getHeader("X-Forwarded-For");
 			logger.info("力美广告点击记录 start mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
 			//验证ip
-			
+			boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getLimei_ip());
+			if (!verfyIp) {
+				logger.error("力美广告点击记录,ip不合法 mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
+				return responseSuccess(responseJson, false, "ip不合法");
+			}
 			//将mac(28E02CE34713)地址加上":"(力美的mac格式:不加密,不带分隔符,大写)
 			if (StringUtils.isNotBlank(mac)) {
 				//mac = StringUtil.joinStringArrayWithCharacter(StringUtil.getStringArrayFromString(mac, 2), ":");
