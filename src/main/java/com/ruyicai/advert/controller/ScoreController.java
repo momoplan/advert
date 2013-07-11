@@ -62,23 +62,23 @@ public class ScoreController {
 			//验证ip
 			boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getLimei_ip());
 			if (!verfyIp) {
-				logger.error("力美积分墙加积分,ip不合法,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source+";ip="+ip);
+				logger.error("力美积分墙加积分,ip不合法  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source+";ip="+ip);
 				return response(responseJson, "500", "ip不合法");
 			}
 			//验证用户名是否为空
 			if (StringUtils.isBlank(aid)) {
-				logger.error("力美积分墙加积分,aid为空,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+				logger.error("力美积分墙加积分,aid为空  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				return response(responseJson, "500", "aid为空");
 			}
 			//验证sign
 			boolean verfySign = verfySign(aduid, uid, aid, point, source, sign, timestamp);
 			if (!verfySign) {
-				logger.error("力美积分墙加积分,签名错误,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+				logger.error("力美积分墙加积分,签名错误  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				return response(responseJson, "500", "签名错误");
 			}
 			//判断重复请求
 			if (!verifyRepeatRequest(sign)) {
-				logger.error("力美积分墙加积分,重复请求,aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+				logger.error("力美积分墙加积分,重复请求  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				return response(responseJson, "500", "重复请求");
 			}
 			//将积分(231.0)转成不带小数点
