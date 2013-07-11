@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class AdvertiseUtil {
 	 * @param channel
 	 * @return
 	 */
-	public String getSourceByChannel(String channel) {
+	/*public String getSourceByChannel(String channel) {
 		String source = "";
 		if (channel!=null&&channel.equals(CoopId.limei_zhuCe.value())) { //力美
 			source = AdvertiseSource.limei.value();
@@ -39,7 +40,7 @@ public class AdvertiseUtil {
 			source = AdvertiseSource.duoMeng.value();
 		}
 		return source;
-	}
+	}*/
 	
 	/**
 	 * 获得广告推广的渠道号
@@ -91,7 +92,7 @@ public class AdvertiseUtil {
 	 * @param mac
 	 * @return
 	 */
-	public AdvertiseInfo getAdvertiseInfoBySourceAndMac(String source, String mac) {
+	/*public AdvertiseInfo getAdvertiseInfoBySourceAndMac(String source, String mac) {
 		AdvertiseInfo advertiseInfo = null;
 		
 		StringBuilder builder = new StringBuilder(" where");
@@ -111,7 +112,7 @@ public class AdvertiseUtil {
 			advertiseInfo = list.get(0);
 		}
 		return advertiseInfo;
-	}
+	}*/
 	
 	/**
 	 * 广告通知第三方
@@ -119,13 +120,13 @@ public class AdvertiseUtil {
 	 */
 	public void notifyThirdParty(AdvertiseInfo advertiseInfo) {
 		try {
-			if (advertiseInfo!=null) {
+			if (advertiseInfo!=null&&StringUtils.equals(advertiseInfo.getState(), "1")) {
 				String source = advertiseInfo.getSource(); //渠道
-				if (source!=null&&source.equals(AdvertiseSource.limei.value())) { //力美
+				if (StringUtils.equals(source, AdvertiseSource.limei.value())) { //力美
 					limeiNotify(advertiseInfo);
-				} else if (source!=null&&source.equals(AdvertiseSource.dianRu.value())) { //点入
+				} else if (StringUtils.equals(source, AdvertiseSource.dianRu.value())) { //点入
 					dianruNotify(advertiseInfo);
-				} else if (source!=null&&source.equals(AdvertiseSource.duoMeng.value())) { //多盟
+				} else if (StringUtils.equals(source, AdvertiseSource.duoMeng.value())) { //多盟
 					domobNotify(advertiseInfo);
 				}
 			}
