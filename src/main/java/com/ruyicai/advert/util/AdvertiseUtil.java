@@ -30,17 +30,17 @@ public class AdvertiseUtil {
 	 * @param channel
 	 * @return
 	 */
-	/*public String getSourceByChannel(String channel) {
+	public String getSourceByChannel(String channel) {
 		String source = "";
-		if (channel!=null&&channel.equals(CoopId.limei_zhuCe.value())) { //力美
+		if (StringUtils.equals(channel, CoopId.limei_zhuCe.value())) { //力美
 			source = AdvertiseSource.limei.value();
-		} else if (channel!=null&&channel.equals(CoopId.dianRu_zhuCe.value())) { //点入
+		} else if (StringUtils.equals(channel, CoopId.dianRu_zhuCe.value())) { //点入
 			source = AdvertiseSource.dianRu.value();
-		} else if (channel!=null&&channel.equals(CoopId.duoMeng_zhuCe.value())) { //多盟
+		} else if (StringUtils.equals(channel, CoopId.duoMeng_zhuCe.value())) { //多盟
 			source = AdvertiseSource.duoMeng.value();
 		}
 		return source;
-	}*/
+	}
 	
 	/**
 	 * 获得广告推广的渠道号
@@ -92,7 +92,7 @@ public class AdvertiseUtil {
 	 * @param mac
 	 * @return
 	 */
-	/*public AdvertiseInfo getAdvertiseInfoBySourceAndMac(String source, String mac) {
+	public AdvertiseInfo getAdvertiseInfoBySourceAndMac(String source, String mac) {
 		AdvertiseInfo advertiseInfo = null;
 		
 		StringBuilder builder = new StringBuilder(" where");
@@ -101,18 +101,18 @@ public class AdvertiseUtil {
 		builder.append(" o.source=? and");
 		params.add(source);
 		
-		builder.append(" o.mac=? and");
+		builder.append(" o.mac=? ");
 		params.add(mac);
 		
-		builder.append(" o.state=? ");
-		params.add("1");
+		/*builder.append(" o.state=? ");
+		params.add("1");*/
 		
 		List<AdvertiseInfo> list = AdvertiseInfo.getList(builder.toString(), "order by o.createtime asc", params);
 		if (list!=null&&list.size()>0) {
 			advertiseInfo = list.get(0);
 		}
 		return advertiseInfo;
-	}*/
+	}
 	
 	/**
 	 * 广告通知第三方
@@ -120,7 +120,7 @@ public class AdvertiseUtil {
 	 */
 	public void notifyThirdParty(AdvertiseInfo advertiseInfo) {
 		try {
-			if (advertiseInfo!=null&&StringUtils.equals(advertiseInfo.getState(), "1")) {
+			if (advertiseInfo!=null&&StringUtils.equals(advertiseInfo.getState(), "1")) { //未通知过第三方
 				String source = advertiseInfo.getSource(); //渠道
 				if (StringUtils.equals(source, AdvertiseSource.limei.value())) { //力美
 					limeiNotify(advertiseInfo);
