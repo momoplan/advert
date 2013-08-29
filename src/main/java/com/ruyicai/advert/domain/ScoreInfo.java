@@ -3,7 +3,6 @@ package com.ruyicai.advert.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.json.RooJson;
@@ -71,6 +69,20 @@ public class ScoreInfo {
 			}
 		}
 		return q.getResultList();
+	}
+	
+	public static long getDistinctUidCount(String where, List<Object> params) {
+		TypedQuery<Long> q = entityManager().createQuery(
+				"SELECT count(distinct o.uid) FROM ScoreInfo o " + where, Long.class);
+		if (null != params && !params.isEmpty()) {
+			int index = 1;
+			for (Object param : params) {
+				q.setParameter(index, param);
+				index = index + 1;
+			}
+		}
+		Long result = q.getSingleResult();
+		return result==null ? 0 : result;
 	}
 	
 }

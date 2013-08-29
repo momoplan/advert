@@ -54,6 +54,7 @@ public class ScoreController {
 	public @ResponseBody String limeiNotify(HttpServletRequest request, @RequestParam("aduid") String aduid, 
 			@RequestParam("uid") String uid, @RequestParam("aid") String aid, @RequestParam("point") String point, 
 			@RequestParam("source") String source, @RequestParam("sign") String sign, @RequestParam("timestamp") String timestamp) {
+		long startmillis = System.currentTimeMillis();
 		JSONObject responseJson = new JSONObject();
 		try {
 			String ip = request.getHeader("X-Forwarded-For");
@@ -81,6 +82,10 @@ public class ScoreController {
 				logger.error("力美积分墙加积分,重复请求  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				return response(responseJson, "500", "重复请求");
 			}
+			if (!verifyCheat(aduid, aid)) {
+				logger.error("力美积分墙加积分,aid对应的uid大于2  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+				return response(responseJson, "500", "aid对应的uid大于2");
+			}
 			//将积分(231.0)转成不带小数点
 			NumberFormat nf = NumberFormat.getInstance();
 			point = nf.format(new BigDecimal(point));
@@ -89,21 +94,33 @@ public class ScoreController {
 			//查询用户编号
 			JSONObject userObject = getUserByUserNo(aid);
 			String userNo = userObject.getString("userNo");
-			String channel = userObject.getString("channel");
 			if (StringUtils.isBlank(userNo)) {
 				return response(responseJson, "500", "用户不存在");
 			}
 			//送彩金
+			String channel = userObject.getString("channel");
 			String errorCode = presentDividend(userNo, point, channel, "力美免费彩金");
 			if (StringUtils.equals(errorCode, "0")) { //赠送成功
-				//更新积分记录的状态
-				updateScoreInfo(scoreInfo, userNo);
+				updateScoreInfo(scoreInfo, userNo); //更新积分记录的状态
+				printProcessTime(startmillis, aid, sign); //打印处理时间
 				return response(responseJson, "200", "赠送成功");
 			}
 		} catch (Exception e) {
 			logger.error("力美积分墙加积分通知发生异常", e);
 		}
+		printProcessTime(startmillis, aid, sign); //打印处理时间
 		return response(responseJson, "500", "赠送失败");
+	}
+	
+	/**
+	 * 打印处理时间
+	 * @param startmillis
+	 * @param aid
+	 * @param sign
+	 */
+	private void printProcessTime(long startmillis, String aid, String sign) {
+		long endmillis = System.currentTimeMillis();
+		logger.info("力美积分墙加积分通知用时:"+(endmillis - startmillis)+";aid="+aid+";sign="+sign);
 	}
 	
 	/**
@@ -139,22 +156,17 @@ public class ScoreController {
 	private JSONObject getUserByUserNo(String userNo) {
 		JSONObject resultObject = new JSONObject();
 		try {
+			resultObject.put("userNo", "");
 			String result = lotteryService.getUserByUserNo(userNo);
 			if (StringUtils.isBlank(result)) {
-				resultObject.put("userNo", "");
-				resultObject.put("channel", "");
 				return resultObject;
 			}
 			JSONObject fromObject = JSONObject.fromObject(result);
 			if (fromObject==null) {
-				resultObject.put("userNo", "");
-				resultObject.put("channel", "");
 				return resultObject;
 			}
 			String errorCode = fromObject.getString("errorCode");
 			if (!StringUtils.equals(errorCode, "0")) {
-				resultObject.put("userNo", "");
-				resultObject.put("channel", "");
 				return resultObject;
 			}
 			JSONObject valueJsonObject = fromObject.getJSONObject("value");
@@ -164,8 +176,6 @@ public class ScoreController {
 		} catch (Exception e) {
 			logger.error("根据用户编号查询用户发生异常", e);
 		}
-		resultObject.put("userNo", "");
-		resultObject.put("channel", "");
 		return resultObject;
 	}
 	
@@ -233,47 +243,48 @@ public class ScoreController {
 	}
 	
 	/**
-	 * 验证ip是否合法
-	 * @param ip
-	 * @return
-	 */
-	/*private boolean verfyIp(String ip) {
-		if (StringUtils.isBlank(ip)) {
-			return false;
-		}
-		String[] ips = StringUtils.split(ip, ",");
-		String[] limeiIps = StringUtils.split(propertiesUtil.getLimei_ip(), ",");
-		List<String> limeiIpList = Arrays.asList(limeiIps);
-		for (String p : ips) {
-			if (StringUtils.isNotBlank(p)&&limeiIpList.contains(p.trim())) {
-				return true;
-			}
-		}
-		return false;
-	}*/
-	
-	/**
 	 * 验证重复请求
 	 * @param sign
 	 * @return
 	 */
 	private boolean verifyRepeatRequest(String sign) {
-		try {
-			StringBuilder builder = new StringBuilder(" where");
-			List<Object> params = new ArrayList<Object>();
-			
-			builder.append(" o.sign=? ");
-			params.add(sign);
-			
-			//builder.append(" o.state='0'");
-			
-			List<ScoreInfo> list = ScoreInfo.getList(builder.toString(), "", params);
-			if (list!=null&&list.size()>0) {
-				return false;
-			}
+		StringBuilder builder = new StringBuilder(" where");
+		List<Object> params = new ArrayList<Object>();
+		
+		builder.append(" o.sign=? ");
+		params.add(sign);
+		
+		List<ScoreInfo> list = ScoreInfo.getList(builder.toString(), "", params);
+		if (list==null||list.size()<=0) {
 			return true;
-		} catch (Exception e) {
-			logger.error("积分墙积分验证重复请求发生异常", e);
+		}
+		return false;
+	}
+	
+	/**
+	 * 验证是否作弊
+	 * @param aduid
+	 * @param uid
+	 * @param aid
+	 * @return
+	 */
+	private boolean verifyCheat(String aduid, String aid) {
+		String limeiAndroidAduid = propertiesUtil.getLimeiAndroidAduid();
+		if (!StringUtils.equals(limeiAndroidAduid, aduid)) {
+			return true;
+		}
+		StringBuilder builder = new StringBuilder(" where");
+		List<Object> params = new ArrayList<Object>();
+		
+		builder.append(" o.aduid=? and");
+		params.add(aduid);
+		
+		builder.append(" o.aid=? ");
+		params.add(aid);
+		
+		long count = ScoreInfo.getDistinctUidCount(builder.toString(), params);
+		if (count<2) {
+			return true;
 		}
 		return false;
 	}

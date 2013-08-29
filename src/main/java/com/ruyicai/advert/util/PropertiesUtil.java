@@ -17,6 +17,12 @@ public class PropertiesUtil {
 	public String getLimei_notifyUrl() {
 		return limei_notifyUrl;
 	}
+	
+	@Value("${limei.android.aduid}")
+	private String limeiAndroidAduid;
+	public String getLimeiAndroidAduid() {
+		return limeiAndroidAduid;
+	}
 
 	@Value("${dianjoy.salt}")
 	private String dianjoy_salt;

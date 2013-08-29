@@ -625,9 +625,9 @@
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
 				<jms.brokerURL>tcp://192.168.0.42:61616</jms.brokerURL>
-				<!-- <camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort> -->
 				<limei.ip>59.151.106.152,59.151.106.150,59.151.106.146,59.151.106.197,59.151.106.4</limei.ip>
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
+				<limei.android.aduid>9c697272e78036382b35056bdf53904b</limei.android.aduid>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.ip>117.79.228.87</dianru.ip>
@@ -647,9 +647,9 @@
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
 				<jms.brokerURL>tcp://192.168.0.42:61616</jms.brokerURL>
-				<!-- <camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort> -->
 				<limei.ip>59.151.106.152,59.151.106.150,59.151.106.146,59.151.106.197,59.151.106.4</limei.ip>
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
+				<limei.android.aduid>9c697272e78036382b35056bdf53904b</limei.android.aduid>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.ip>117.79.228.87</dianru.ip>
@@ -669,9 +669,9 @@
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
 				<jms.brokerURL>failover://(tcp://192.168.99.16:61616,tcp://192.168.99.17:61616)?randomize=false</jms.brokerURL>
-				<!-- <camel.jmxAgent.registryPort>2098</camel.jmxAgent.registryPort> -->
 				<limei.ip>59.151.106.152,59.151.106.150,59.151.106.146,59.151.106.197,59.151.106.4</limei.ip>
 				<limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl>
+				<limei.android.aduid>9c697272e78036382b35056bdf53904b</limei.android.aduid>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.ip>117.79.228.87</dianru.ip>
