@@ -71,9 +71,9 @@ public class ScoreInfo {
 		return q.getResultList();
 	}
 	
-	public static long getDistinctUidCount(String where, List<Object> params) {
-		TypedQuery<Long> q = entityManager().createQuery(
-				"SELECT count(distinct o.uid) FROM ScoreInfo o " + where, Long.class);
+	public static List<String> getDistinctUidList(String where, List<Object> params) {
+		TypedQuery<String> q = entityManager().createQuery(
+				"SELECT distinct o.uid FROM ScoreInfo o " + where, String.class);
 		if (null != params && !params.isEmpty()) {
 			int index = 1;
 			for (Object param : params) {
@@ -81,8 +81,7 @@ public class ScoreInfo {
 				index = index + 1;
 			}
 		}
-		Long result = q.getSingleResult();
-		return result==null ? 0 : result;
+		return q.getResultList();
 	}
 	
 }

@@ -82,7 +82,8 @@ public class ScoreController {
 				logger.error("力美积分墙加积分,重复请求  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				return response(responseJson, "500", "重复请求");
 			}
-			if (!verifyCheat(aduid, aid)) {
+			//判断是否是作弊用户
+			if (!verifyCheat(aduid, uid, aid)) {
 				logger.error("力美积分墙加积分,aid对应的uid大于2  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				return response(responseJson, "500", "aid对应的uid大于2");
 			}
@@ -268,7 +269,7 @@ public class ScoreController {
 	 * @param aid
 	 * @return
 	 */
-	private boolean verifyCheat(String aduid, String aid) {
+	private boolean verifyCheat(String aduid, String uid, String aid) {
 		String limeiAndroidAduid = propertiesUtil.getLimeiAndroidAduid();
 		if (!StringUtils.equals(limeiAndroidAduid, aduid)) {
 			return true;
@@ -282,8 +283,11 @@ public class ScoreController {
 		builder.append(" o.aid=? ");
 		params.add(aid);
 		
-		long count = ScoreInfo.getDistinctUidCount(builder.toString(), params);
-		if (count<2) {
+		List<String> list = ScoreInfo.getDistinctUidList(builder.toString(), params);
+		if (list!=null&&list.size()<=2) {
+			if (list.size()==2&&!list.contains(uid)) {
+				return false;
+			}
 			return true;
 		}
 		return false;
