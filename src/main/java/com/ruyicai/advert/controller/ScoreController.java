@@ -53,13 +53,14 @@ public class ScoreController {
 	@RequestMapping(value = "/limeiNotify", method = RequestMethod.GET)
 	public @ResponseBody String limeiNotify(HttpServletRequest request, @RequestParam("aduid") String aduid, 
 			@RequestParam("uid") String uid, @RequestParam("aid") String aid, @RequestParam("point") String point, 
-			@RequestParam("source") String source, @RequestParam("sign") String sign, @RequestParam("timestamp") String timestamp) {
+			@RequestParam("source") String source, @RequestParam("sign") String sign, @RequestParam("timestamp") String timestamp,
+			@RequestParam("idfa") String idfa) {
 		long startmillis = System.currentTimeMillis();
 		JSONObject responseJson = new JSONObject();
 		try {
 			String ip = request.getHeader("X-Forwarded-For");
 			logger.info("力美积分墙加积分通知 start aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source
-					+";sign="+sign+";timestamp="+timestamp+";ip="+ip);
+					+";sign="+sign+";timestamp="+timestamp+";idfa="+idfa+";ip="+ip);
 			//验证ip
 			boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getLimei_ip());
 			if (!verfyIp) {
@@ -72,7 +73,7 @@ public class ScoreController {
 				return response(responseJson, "500", "aid为空");
 			}
 			//验证sign
-			boolean verfySign = verfySign(aduid, uid, aid, point, source, sign, timestamp);
+			boolean verfySign = verfySign(aduid, uid, aid, point, source, sign, timestamp, idfa);
 			if (!verfySign) {
 				logger.error("力美积分墙加积分,签名错误  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 				return response(responseJson, "500", "签名错误");
@@ -224,11 +225,13 @@ public class ScoreController {
 	 * @param timestamp
 	 * @return
 	 */
-	private boolean verfySign(String aduid, String uid, String aid, String point, String source, String sign, String timestamp) {
+	private boolean verfySign(String aduid, String uid, String aid, String point, String source, String sign, String timestamp,
+			String idfa) {
 		try {
 			StringBuilder builder = new StringBuilder();
 			builder.append("aduid").append(aduid);
 			builder.append("aid").append(aid);
+			builder.append("idfa").append(idfa);
 			builder.append("point").append(point);
 			builder.append("source").append(source);
 			builder.append("timestamp").append(timestamp);
