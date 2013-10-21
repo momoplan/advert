@@ -674,7 +674,7 @@
 				<limei.android.aduid>9c697272e78036382b35056bdf53904b</limei.android.aduid>
 				<dianjoy.salt>ad971540473</dianjoy.salt>
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
-				<dianru.ip>117.79.228.87</dianru.ip>
+				<dianru.ip>211.155.87.227</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>
