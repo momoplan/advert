@@ -41,6 +41,7 @@ public class AdvertiseController {
 	@RequestMapping(value = "/limeiNotify", method = RequestMethod.GET)
 	public @ResponseBody String limeiNotify(HttpServletRequest request, @RequestParam("mac") String mac, 
 			@RequestParam("appId") String appId, @RequestParam("source") String source) {
+		long startTimeMillis = System.currentTimeMillis();
 		JSONObject responseJson = new JSONObject();
 		try {
 			String ip = request.getHeader("X-Forwarded-For");
@@ -59,14 +60,19 @@ public class AdvertiseController {
 			if (list==null||list.size()==0) {
 				//保存记录
 				saveAdvertiseInfoByAppid(mac, appId, source);
+				long endTimeMillis = System.currentTimeMillis();
+				logger.info("力美广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
 				return responseSuccess(responseJson, true, "通知成功");
 			} else {
+				long endTimeMillis = System.currentTimeMillis();
+				logger.info("力美广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
 				return responseSuccess(responseJson, false, "重复记录");
 			}
 		} catch (Exception e) {
 			logger.error("力美广告点击记录发生异常", e);
 		}
-		//logger.info("力美广告点击记录 end mac="+mac+";appId="+appId+";source="+source+",result="+responseJson.toString());
+		long endTimeMillis = System.currentTimeMillis();
+		logger.info("力美广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
 		return responseSuccess(responseJson, false, "通知失败");
 	}
 	
