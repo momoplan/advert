@@ -70,6 +70,14 @@ public class UserInf {
 	@Column(name = "mac")
 	private String mac;
 	
+	
+	public static List<UserInf> getListByMacPlatform(String mac, String platform) {
+		TypedQuery<UserInf> q = entityManager().createQuery(
+				"SELECT o FROM UserInf o where o.mac=? and o.platfrom=? order by o.createtime desc", UserInf.class);
+				q.setParameter(1, mac).setParameter(2, platform);
+		return q.getResultList();
+	}
+	
 	public static List<UserInf> getList(String where, String orderby, List<Object> params) {
 		TypedQuery<UserInf> q = entityManager().createQuery(
 				"SELECT o FROM UserInf o " + where + orderby, UserInf.class);

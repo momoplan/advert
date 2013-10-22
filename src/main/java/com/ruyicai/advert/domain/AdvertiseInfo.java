@@ -52,16 +52,31 @@ public class AdvertiseInfo {
 	private String state;
 	
 	
-	public static List<AdvertiseInfo> getList(String where, String orderby, List<Object> params) {
+	public static List<AdvertiseInfo> getListByMac(String mac) {
 		TypedQuery<AdvertiseInfo> q = entityManager().createQuery(
-				"SELECT o FROM AdvertiseInfo o " + where + orderby, AdvertiseInfo.class);
-		if (null != params && !params.isEmpty()) {
-			int index = 1;
-			for (Object param : params) {
-				q.setParameter(index, param);
-				index = index + 1;
-			}
-		}
+				"SELECT o FROM AdvertiseInfo o where o.mac=? order by o.createtime desc", AdvertiseInfo.class)
+				.setParameter(1, mac);
+		return q.getResultList();
+	}
+	
+	public static List<AdvertiseInfo> getListByMacSource(String mac, String source) {
+		TypedQuery<AdvertiseInfo> q = entityManager().createQuery(
+				"SELECT o FROM AdvertiseInfo o where o.mac=? and o.source=? order by o.createtime desc", AdvertiseInfo.class)
+				.setParameter(1, mac).setParameter(2, source);
+		return q.getResultList();
+	}
+	
+	public static List<AdvertiseInfo> getListByMacSourceDrkey(String mac, String source, String drkey) {
+		TypedQuery<AdvertiseInfo> q = entityManager().createQuery(
+				"SELECT o FROM AdvertiseInfo o where o.mac=? and o.source=? and o.drkey=? order by o.createtime desc", AdvertiseInfo.class)
+				.setParameter(1, mac).setParameter(2, source).setParameter(3, drkey);
+		return q.getResultList();
+	}
+	
+	public static List<AdvertiseInfo> getListByMacSourceAppid(String mac, String source, String appId) {
+		TypedQuery<AdvertiseInfo> q = entityManager().createQuery(
+				"SELECT o FROM AdvertiseInfo o where o.mac=? and o.source=? and o.appid=? order by o.createtime desc", AdvertiseInfo.class)
+				.setParameter(1, mac).setParameter(2, source).setParameter(3, appId);
 		return q.getResultList();
 	}
 	
