@@ -78,17 +78,4 @@ public class UserInf {
 		return q.getResultList();
 	}
 	
-	public static List<UserInf> getList(String where, String orderby, List<Object> params) {
-		TypedQuery<UserInf> q = entityManager().createQuery(
-				"SELECT o FROM UserInf o " + where + orderby, UserInf.class);
-		if (null != params && !params.isEmpty()) {
-			int index = 1;
-			for (Object param : params) {
-				q.setParameter(index, param);
-				index = index + 1;
-			}
-		}
-		return q.getResultList();
-	}
-	
 }
