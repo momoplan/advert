@@ -105,8 +105,12 @@ public class AdvertiseController {
 			if (list==null||list.size()==0) {
 				//保存记录
 				saveAdvertiseInfoByDrkey(mac, drkey, source);
+				long endTimeMillis = System.currentTimeMillis();
+				logger.info("点入广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",drkey="+drkey);
 				return responseSuccess(responseJson, true, "通知成功");
 			} else {
+				long endTimeMillis = System.currentTimeMillis();
+				logger.info("点入广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",drkey="+drkey);
 				return responseSuccess(responseJson, false, "重复记录");
 			}
 		} catch (Exception e) {
