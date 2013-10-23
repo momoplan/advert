@@ -52,9 +52,17 @@ public class AdvertiseController {
 				logger.error("力美广告点击记录,ip不合法 mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
 				return responseSuccess(responseJson, false, "ip不合法");
 			}
+			//验证参数为空
+			if (StringUtils.isBlank(mac)) {
+				return responseSuccess(responseJson, false, "参数错误");
+			}
 			//将mac(28E02CE34713)地址加上":"(力美的mac格式:不加密,不带分隔符,大写)
-			if (StringUtils.isNotBlank(mac)) {
-				mac = StringUtils.join(StringUtil.getStringArrayFromString(mac, 2), ":");
+			mac = StringUtils.join(StringUtil.getStringArrayFromString(mac, 2), ":");
+			//验证是否已激活
+			boolean verifyActivate = verifyActivate(mac);
+			if (!verifyActivate) {
+				logger.error("力美广告点击记录,已被激活 mac="+mac);
+				return responseSuccess(responseJson, false, "已被激活");
 			}
 			List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceAppid(mac, source, appId);
 			if (list==null||list.size()==0) {
@@ -134,7 +142,7 @@ public class AdvertiseController {
 	 * @param source
 	 * @return
 	 */
-	@RequestMapping(value = "/domobNotify", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/domobNotify", method = RequestMethod.GET)
 	public @ResponseBody String domobNotify(@RequestParam("udid") String mac, @RequestParam("app") String appId,  
 			@RequestParam("source") String source, @RequestParam("returnFormat") String returnFormat) {
 		JSONObject responseJson = new JSONObject();
@@ -151,9 +159,8 @@ public class AdvertiseController {
 		} catch (Exception e) {
 			logger.error("多盟广告点击记录发生异常", e);
 		}
-		//logger.info("多盟广告点击记录 end mac="+mac+";appId="+appId+";source="+source+";returnFormat="+returnFormat);
 		return responseSuccess(responseJson, false, "通知失败");
-	}
+	}*/
 	
 	/**
 	 * 请求响应(success)
