@@ -1,10 +1,6 @@
 package com.ruyicai.advert.controller;
 
-import java.util.Date;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruyicai.advert.domain.AdvertiseInfo;
-import com.ruyicai.advert.util.PropertiesUtil;
-import com.ruyicai.advert.util.StringUtil;
-import com.ruyicai.advert.util.VerifyUtil;
+import com.ruyicai.advert.service.AdvertiseService;
 
 /**
  * 广告点击记录Controller
@@ -29,7 +22,7 @@ public class AdvertiseController {
 	private Logger logger = Logger.getLogger(AdvertiseController.class);
 	
 	@Autowired
-	private PropertiesUtil propertiesUtil;
+	private AdvertiseService advertiseService;
 	
 	/**
 	 * 力美广告
@@ -39,49 +32,15 @@ public class AdvertiseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/limeiNotify", method = RequestMethod.GET)
-	public @ResponseBody String limeiNotify(HttpServletRequest request, @RequestParam("mac") String mac, 
+	public @ResponseBody 
+		ResponseData limeiNotify(HttpServletRequest request, @RequestParam("mac") String mac, 
 			@RequestParam("appId") String appId, @RequestParam("source") String source) {
-		long startTimeMillis = System.currentTimeMillis();
-		JSONObject responseJson = new JSONObject();
 		try {
-			String ip = request.getHeader("X-Forwarded-For");
-			logger.info("力美广告点击记录 start mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
-			//验证ip
-			boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getLimei_ip());
-			if (!verfyIp) {
-				logger.error("力美广告点击记录,ip不合法 mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
-				return responseSuccess(responseJson, false, "ip不合法");
-			}
-			//验证参数为空
-			if (StringUtils.isBlank(mac)) {
-				return responseSuccess(responseJson, false, "参数错误");
-			}
-			//将mac(28E02CE34713)地址加上":"(力美的mac格式:不加密,不带分隔符,大写)
-			mac = StringUtils.join(StringUtil.getStringArrayFromString(mac, 2), ":");
-			//验证是否已激活
-			boolean verifyActivate = verifyActivate(mac);
-			if (!verifyActivate) {
-				logger.error("力美广告点击记录,已被激活 mac="+mac);
-				return responseSuccess(responseJson, false, "已被激活");
-			}
-			List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceAppid(mac, source, appId);
-			if (list==null||list.size()==0) {
-				//保存记录
-				saveAdvertiseInfoByAppid(mac, appId, source);
-				long endTimeMillis = System.currentTimeMillis();
-				logger.info("力美广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
-				return responseSuccess(responseJson, true, "通知成功");
-			} else {
-				long endTimeMillis = System.currentTimeMillis();
-				logger.info("力美广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
-				return responseSuccess(responseJson, false, "重复记录");
-			}
+			return advertiseService.limeiNotify(request, mac, appId, source);
 		} catch (Exception e) {
-			logger.error("力美广告点击记录发生异常", e);
+			logger.error("力美广告通知发生异常,mac="+mac+",appId="+appId, e);
+			return new ResponseData(false, "通知失败");
 		}
-		long endTimeMillis = System.currentTimeMillis();
-		logger.info("力美广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
-		return responseSuccess(responseJson, false, "通知失败");
 	}
 	
 	/**
@@ -91,48 +50,15 @@ public class AdvertiseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/dianruNotify", method = RequestMethod.GET)
-	public @ResponseBody String dianruNotify(HttpServletRequest request, @RequestParam("drkey") String drkey, 
+	public @ResponseBody 
+		ResponseData dianruNotify(HttpServletRequest request, @RequestParam("drkey") String drkey, 
 			@RequestParam("source") String source) {
-		long startTimeMillis = System.currentTimeMillis();
-		JSONObject responseJson = new JSONObject();
 		try {
-			String ip = request.getHeader("X-Forwarded-For");
-			logger.info("点入广告点击记录 start drkey="+drkey+";source="+source+";ip="+ip);
-			//验证ip
-			boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getDianru_ip());
-			if (!verfyIp) {
-				logger.error("点入广告点击记录,ip不合法 drkey="+drkey+";source="+source+";ip="+ip);
-				return responseSuccess(responseJson, false, "ip不合法");
-			}
-			//验证参数
-			if (StringUtils.isBlank(drkey) || drkey.length()<32) {
-				return responseSuccess(responseJson, false, "参数错误");
-			}
-			String mac = StringUtils.substring(drkey, 32); //mac地址
-			//验证是否已激活
-			boolean verifyActivate = verifyActivate(mac);
-			if (!verifyActivate) {
-				logger.error("点入广告点击记录,已被激活 drkey="+drkey);
-				return responseSuccess(responseJson, false, "已被激活");
-			}
-			List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceDrkey(mac, source, drkey);
-			if (list==null||list.size()==0) {
-				//保存记录
-				saveAdvertiseInfoByDrkey(mac, drkey, source);
-				long endTimeMillis = System.currentTimeMillis();
-				logger.info("点入广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",drkey="+drkey);
-				return responseSuccess(responseJson, true, "通知成功");
-			} else {
-				long endTimeMillis = System.currentTimeMillis();
-				logger.info("点入广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",drkey="+drkey);
-				return responseSuccess(responseJson, false, "重复记录");
-			}
+			return advertiseService.dianruNotify(request, drkey, source);
 		} catch (Exception e) {
-			logger.error("点入广告点击记录发生异常", e);
+			logger.error("点入广告通知发生异常,drkey="+drkey, e);
+			return new ResponseData(false, "通知失败");
 		}
-		long endTimeMillis = System.currentTimeMillis();
-		logger.info("点入广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",drkey="+drkey);
-		return responseSuccess(responseJson, false, "通知失败");
 	}
 	
 	/**
@@ -143,91 +69,35 @@ public class AdvertiseController {
 	 * @return
 	 */
 	/*@RequestMapping(value = "/domobNotify", method = RequestMethod.GET)
-	public @ResponseBody String domobNotify(@RequestParam("udid") String mac, @RequestParam("app") String appId,  
+	public @ResponseBody 
+		ResponseData domobNotify(@RequestParam("udid") String mac, @RequestParam("app") String appId,  
 			@RequestParam("source") String source, @RequestParam("returnFormat") String returnFormat) {
-		JSONObject responseJson = new JSONObject();
 		try {
-			logger.info("多盟广告点击记录 start mac="+mac+";appId="+appId+";source="+source+";returnFormat="+returnFormat);
-			List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceAppid(mac, source, appId);
-			if (list==null||list.size()==0) {
-				//保存记录
-				saveAdvertiseInfoByAppid(mac, appId, source);
-				return responseSuccess(responseJson, true, "通知成功");
-			} else {
-				return responseSuccess(responseJson, false, "重复记录");
-			}
+			return advertiseService.domobNotify(mac, appId, source, returnFormat);
 		} catch (Exception e) {
-			logger.error("多盟广告点击记录发生异常", e);
+			logger.error("多盟广告通知发生异常,mac="+mac+",appId="+appId, e);
+			return new ResponseData(false, "通知失败");
 		}
-		return responseSuccess(responseJson, false, "通知失败");
 	}*/
 	
 	/**
-	 * 请求响应(success)
-	 * @param responseJson
-	 * @param success
-	 * @param message
+	 * 米迪广告
+	 * @param request
+	 * @param mac
+	 * @param appid
+	 * @param source
 	 * @return
 	 */
-	private String responseSuccess(JSONObject responseJson, boolean success, String message) {
-		responseJson.put("success", success);
-		responseJson.put("message", message);
-		return responseJson.toString();
-	}
-	
-	/**
-	 * 根据appId保存广告记录
-	 * @param mac
-	 * @param appId
-	 * @param source
-	 */
-	private void saveAdvertiseInfoByAppid(String mac, String appId, String source) {
-		AdvertiseInfo advertiseInfo = new AdvertiseInfo();
-		advertiseInfo.setMac(mac);
-		advertiseInfo.setAppid(appId);
-		advertiseInfo.setSource(source);
-		advertiseInfo.setCreatetime(new Date());
-		advertiseInfo.setUpdatetime(new Date());
-		advertiseInfo.setState("1");
-		advertiseInfo.persist();
-	}
-	
-	/**
-	 * 根据drkey保存广告记录
-	 * @param mac
-	 * @param drkey
-	 * @param source
-	 */
-	private void saveAdvertiseInfoByDrkey(String mac, String drkey, String source) {
-		AdvertiseInfo advertiseInfo = new AdvertiseInfo();
-		advertiseInfo.setMac(mac);
-		advertiseInfo.setDrkey(drkey);
-		advertiseInfo.setSource(source);
-		advertiseInfo.setCreatetime(new Date());
-		advertiseInfo.setUpdatetime(new Date());
-		advertiseInfo.setState("1");
-		advertiseInfo.persist();
-	}
-	
-	/**
-	 * 验证是否已经激活
-	 * @param mac
-	 * @return true:未激活;false:已激活
-	 */
-	private boolean verifyActivate(String mac) {
+	@RequestMapping(value = "/miidiNotify", method = RequestMethod.GET)
+	public @ResponseBody
+		ResponseData miidiNotify(HttpServletRequest request, @RequestParam(value = "mac") String mac, 
+			@RequestParam(value = "appid") String appid, @RequestParam(value = "source") String source) {
 		try {
-			List<AdvertiseInfo> list = AdvertiseInfo.getListByMac(mac);
-			if (list!=null && list.size()>0) {
-				for (AdvertiseInfo advertiseInfo : list) {
-					if (StringUtils.equals(advertiseInfo.getState(), "0")) { //已激活
-						return false;
-					}
-				}
-			}
+			return advertiseService.miidiNotify(request, mac, appid, source);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("米迪广告通知发生异常,mac="+mac+",appid="+appid, e);
+			return new ResponseData(false, "通知失败");
 		}
-		return true;
 	}
 	
 }
