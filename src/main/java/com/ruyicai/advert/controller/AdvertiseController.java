@@ -38,7 +38,7 @@ public class AdvertiseController {
 		try {
 			return advertiseService.limeiNotify(request, mac, appId, source);
 		} catch (Exception e) {
-			logger.error("力美广告通知发生异常,mac="+mac+",appId="+appId, e);
+			logger.error("力美广告点击记录发生异常,mac="+mac+",appId="+appId, e);
 			return new ResponseData(false, "通知失败");
 		}
 	}
@@ -56,7 +56,7 @@ public class AdvertiseController {
 		try {
 			return advertiseService.dianruNotify(request, drkey, source);
 		} catch (Exception e) {
-			logger.error("点入广告通知发生异常,drkey="+drkey, e);
+			logger.error("点入广告点击记录发生异常,drkey="+drkey, e);
 			return new ResponseData(false, "通知失败");
 		}
 	}
@@ -75,7 +75,7 @@ public class AdvertiseController {
 		try {
 			return advertiseService.domobNotify(mac, appId, source, returnFormat);
 		} catch (Exception e) {
-			logger.error("多盟广告通知发生异常,mac="+mac+",appId="+appId, e);
+			logger.error("多盟广告点击记录发生异常,mac="+mac+",appId="+appId, e);
 			return new ResponseData(false, "通知失败");
 		}
 	}*/
@@ -95,7 +95,7 @@ public class AdvertiseController {
 		try {
 			return advertiseService.miidiNotify(request, mac, appid, source);
 		} catch (Exception e) {
-			logger.error("米迪广告通知发生异常,mac="+mac+",appid="+appid, e);
+			logger.error("米迪广告点击记录发生异常,mac="+mac+",appid="+appid, e);
 			return new ResponseData(false, "通知失败");
 		}
 	}

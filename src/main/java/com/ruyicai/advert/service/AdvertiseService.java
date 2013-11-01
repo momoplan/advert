@@ -22,7 +22,7 @@ public class AdvertiseService {
 	private PropertiesUtil propertiesUtil;
 	
 	/**
-	 * 力美广告通知
+	 * 力美广告
 	 * @param request
 	 * @param mac
 	 * @param appId
@@ -84,7 +84,7 @@ public class AdvertiseService {
 		}
 		//验证参数
 		if (StringUtils.isBlank(drkey) || drkey.length()<32) {
-			return new ResponseData(false, "参数错误");
+			return new ResponseData(false, "参数为空");
 		}
 		String mac = StringUtils.substring(drkey, 32); //mac地址
 		//验证是否已激活
@@ -135,8 +135,38 @@ public class AdvertiseService {
 	 * @param source
 	 * @return
 	 */
-	public ResponseData miidiNotify(HttpServletRequest request, String mac, String appid, String source) {
-		return new ResponseData(true, "通知成功");
+	public ResponseData miidiNotify(HttpServletRequest request, String mac, String appId, String source) {
+		long startTimeMillis = System.currentTimeMillis();
+		String ip = request.getHeader("X-Forwarded-For");
+		logger.info("米迪广告点击记录 start mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
+		//验证ip
+		boolean verfyIp = VerifyUtil.verfyIp(ip, propertiesUtil.getDianru_ip());
+		if (!verfyIp) {
+			logger.error("米迪广告点击记录,ip不合法 mac="+mac+";appId="+appId+";source="+source+";ip="+ip);
+			return new ResponseData(false, "ip不合法");
+		}
+		//验证参数
+		if (StringUtils.isBlank(mac)) {
+			return new ResponseData(false, "参数为空");
+		}
+		//验证是否已激活
+		boolean verifyActivate = verifyActivate(mac);
+		if (!verifyActivate) {
+			logger.error("米迪广告点击记录,已被激活 mac="+mac);
+			return new ResponseData(false, "已被激活");
+		}
+		List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceAppid(mac, source, appId);
+		if (list==null||list.size()==0) {
+			//保存记录
+			saveAdvertiseInfoByAppid(mac, appId, source);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("米迪广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
+			return new ResponseData(true, "通知成功");
+		} else {
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("米迪广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
+			return new ResponseData(false, "重复记录");
+		}
 	}
 	
 	private String transferMac(String mac) {
