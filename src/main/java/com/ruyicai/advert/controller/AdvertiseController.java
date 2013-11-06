@@ -36,7 +36,12 @@ public class AdvertiseController {
 		ResponseData limeiNotify(HttpServletRequest request, @RequestParam("mac") String mac, 
 			@RequestParam("appId") String appId, @RequestParam("source") String source) {
 		try {
-			return advertiseService.limeiNotify(request, mac, appId, source);
+			long startTimeMillis = System.currentTimeMillis();
+			String ip = request.getHeader("X-Forwarded-For");
+			ResponseData response = advertiseService.limeiReceive(ip, mac, appId, source);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("力美广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
+			return response;
 		} catch (Exception e) {
 			logger.error("力美广告点击记录发生异常,mac="+mac+",appId="+appId, e);
 			return new ResponseData(false, "通知失败");
@@ -54,7 +59,12 @@ public class AdvertiseController {
 		ResponseData dianruNotify(HttpServletRequest request, @RequestParam("drkey") String drkey, 
 			@RequestParam("source") String source) {
 		try {
-			return advertiseService.dianruNotify(request, drkey, source);
+			long startTimeMillis = System.currentTimeMillis();
+			String ip = request.getHeader("X-Forwarded-For");
+			ResponseData response = advertiseService.dianruReceive(ip, drkey, source);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("点入广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",drkey="+drkey);
+			return response;
 		} catch (Exception e) {
 			logger.error("点入广告点击记录发生异常,drkey="+drkey, e);
 			return new ResponseData(false, "通知失败");
@@ -68,17 +78,23 @@ public class AdvertiseController {
 	 * @param source
 	 * @return
 	 */
-	/*@RequestMapping(value = "/domobNotify", method = RequestMethod.GET)
+	@RequestMapping(value = "/domobNotify", method = RequestMethod.GET)
 	public @ResponseBody 
-		ResponseData domobNotify(@RequestParam("udid") String mac, @RequestParam("app") String appId,  
-			@RequestParam("source") String source, @RequestParam("returnFormat") String returnFormat) {
+		ResponseData domobNotify(HttpServletRequest request, @RequestParam("udid") String mac, 
+				@RequestParam("app") String appId,  @RequestParam("source") String source, 
+				@RequestParam("returnFormat") String returnFormat) {
 		try {
-			return advertiseService.domobNotify(mac, appId, source, returnFormat);
+			long startTimeMillis = System.currentTimeMillis();
+			String ip = request.getHeader("X-Forwarded-For");
+			ResponseData response = advertiseService.domobReceive(ip, mac, appId, source, returnFormat);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("多盟广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
+			return response;
 		} catch (Exception e) {
 			logger.error("多盟广告点击记录发生异常,mac="+mac+",appId="+appId, e);
 			return new ResponseData(false, "通知失败");
 		}
-	}*/
+	}
 	
 	/**
 	 * 米迪广告
@@ -91,11 +107,16 @@ public class AdvertiseController {
 	@RequestMapping(value = "/miidiNotify", method = RequestMethod.GET)
 	public @ResponseBody
 		ResponseData miidiNotify(HttpServletRequest request, @RequestParam(value = "mac") String mac, 
-			@RequestParam(value = "appid") String appid, @RequestParam(value = "source") String source) {
+			@RequestParam(value = "appid") String appId, @RequestParam(value = "source") String source) {
 		try {
-			return advertiseService.miidiNotify(request, mac, appid, source);
+			long startTimeMillis = System.currentTimeMillis();
+			String ip = request.getHeader("X-Forwarded-For");
+			ResponseData response = advertiseService.miidiReceive(ip, mac, appId, source);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("米迪广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
+			return response;
 		} catch (Exception e) {
-			logger.error("米迪广告点击记录发生异常,mac="+mac+",appid="+appid, e);
+			logger.error("米迪广告点击记录发生异常,mac="+mac+",appId="+appId, e);
 			return new ResponseData(false, "通知失败");
 		}
 	}

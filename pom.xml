@@ -633,6 +633,7 @@
 				<dianru.ip>211.155.87.227</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
+				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -655,6 +656,7 @@
 				<dianru.ip>211.155.87.227</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
+				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -677,6 +679,7 @@
 				<dianru.ip>211.155.87.227</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
+				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>
 			</properties>
 		</profile>

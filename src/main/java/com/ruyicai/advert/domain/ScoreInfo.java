@@ -84,4 +84,11 @@ public class ScoreInfo {
 		return q.getResultList();
 	}
 	
+	public static List<ScoreInfo> findBySign(String sign) {
+		TypedQuery<ScoreInfo> q = entityManager().createQuery(
+				"SELECT o FROM ScoreInfo o where o.sign=?", ScoreInfo.class);
+		q.setParameter(1, sign);
+		return q.getResultList();
+	}
+	
 }

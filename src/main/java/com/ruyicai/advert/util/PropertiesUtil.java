@@ -54,6 +54,12 @@ public class PropertiesUtil {
 		return domob_notifyUrl;
 	}
 	
+	@Value("${miidi.notifyUrl}")
+	private String miidi_notifyUrl;
+	public String getMiidi_notifyUrl() {
+		return miidi_notifyUrl;
+	}
+	
 	@Value("${lotteryUrl}")
 	private String lotteryUrl;
 	public String getLotteryUrl() {

@@ -6,7 +6,8 @@ public enum AdvertiseSource {
 
 	limei("limei", "力美", "936"),
 	dianRu("diarnu", "点入", "937"),
-	duoMeng("domob", "多盟", "938");
+	duoMeng("domob", "多盟", "938"),
+	miidi("miidi", "米迪", "1030");
 	
 	private String value;
 	
