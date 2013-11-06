@@ -22,6 +22,11 @@ public class Domob extends AbstractScoreWall {
 	private PropertiesUtil propertiesUtil;
 	
 	@Override
+	public void init() {
+		
+	}
+	
+	@Override
 	public Map<String, Object> receiveAdvertise(Map<String, String> param) {
 		//String ip = param.get("ip");
 		String mac = param.get("mac");

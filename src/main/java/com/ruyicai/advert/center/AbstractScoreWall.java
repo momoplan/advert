@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+
 import com.ruyicai.advert.domain.AdvertiseInfo;
 
-public abstract class AbstractScoreWall implements ScoreWall {
+public abstract class AbstractScoreWall implements ScoreWall, ApplicationListener<ContextRefreshedEvent> {
 	
 	private Logger logger = Logger.getLogger(AbstractScoreWall.class);
 	
@@ -21,6 +24,13 @@ public abstract class AbstractScoreWall implements ScoreWall {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+	
+	public abstract void init();
+	
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		this.init();
 	}
 
 	public Map<String, Object> response(Object success, String message) {
