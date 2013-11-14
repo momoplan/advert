@@ -71,16 +71,17 @@ public class ScoreInfo {
 		return q.getResultList();
 	}
 	
-	public static List<String> getDistinctUidList(String where, List<Object> params) {
+	public static List<String> getDistinctUidList(String aduid, String aid) {
 		TypedQuery<String> q = entityManager().createQuery(
-				"SELECT distinct o.uid FROM ScoreInfo o " + where, String.class);
-		if (null != params && !params.isEmpty()) {
-			int index = 1;
-			for (Object param : params) {
-				q.setParameter(index, param);
-				index = index + 1;
-			}
-		}
+				"SELECT distinct o.uid FROM ScoreInfo o where o.aduid=? and o.aid=?", String.class);
+		q.setParameter(1, aduid).setParameter(2, aid);
+		return q.getResultList();
+	}
+	
+	public static List<String> getDistinctAidList(String aduid, String uid) {
+		TypedQuery<String> q = entityManager().createQuery(
+				"SELECT distinct o.aid FROM ScoreInfo o where o.aduid=? and o.uid=?", String.class);
+		q.setParameter(1, aduid).setParameter(2, uid);
 		return q.getResultList();
 	}
 	

@@ -2,7 +2,6 @@ package com.ruyicai.advert.center;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -134,10 +133,15 @@ public class Limei extends AbstractScoreWall {
 			logger.error("力美积分墙加积分,重复请求  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return response("500", "重复请求");
 		}
-		//判断是否是作弊用户
-		if (!verifyCheat(aduid, uid, aid)) {
+		//判断是否是作弊用户(一个userno只能对应2个mac)
+		if (!verifyCheatUid(aduid, uid, aid)) {
 			logger.error("力美积分墙加积分,aid对应的uid大于2  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return response("500", "aid对应的uid大于2");
+		}
+		//判断是否是作弊用户(一个mac只能对应2个userno)
+		if (!verifyCheatAid(aduid, uid, aid)) {
+			logger.error("力美积分墙加积分,uid对应的aid大于2  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+			return response("500", "uid对应的aid大于2");
 		}
 		//将积分(231.0)转成不带小数点
 		NumberFormat nf = NumberFormat.getInstance();
@@ -189,23 +193,29 @@ public class Limei extends AbstractScoreWall {
 		return false;
 	}
 	
-	private boolean verifyCheat(String aduid, String uid, String aid) {
+	private boolean verifyCheatUid(String aduid, String uid, String aid) {
 		String limeiAndroidAduid = propertiesUtil.getLimeiAndroidAduid();
 		if (!StringUtils.equals(limeiAndroidAduid, aduid)) {
 			return true;
 		}
-		StringBuilder builder = new StringBuilder(" where");
-		List<Object> params = new ArrayList<Object>();
-		
-		builder.append(" o.aduid=? and");
-		params.add(aduid);
-		
-		builder.append(" o.aid=? ");
-		params.add(aid);
-		
-		List<String> list = ScoreInfo.getDistinctUidList(builder.toString(), params);
+		List<String> list = ScoreInfo.getDistinctUidList(aduid, aid);
 		if (list!=null&&list.size()<=2) {
 			if (list.size()==2&&!list.contains(uid)) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean verifyCheatAid(String aduid, String uid, String aid) {
+		String limeiAndroidAduid = propertiesUtil.getLimeiAndroidAduid();
+		if (!StringUtils.equals(limeiAndroidAduid, aduid)) {
+			return true;
+		}
+		List<String> list = ScoreInfo.getDistinctAidList(aduid, uid);
+		if (list!=null&&list.size()<=2) {
+			if (list.size()==2&&!list.contains(aid)) {
 				return false;
 			}
 			return true;
