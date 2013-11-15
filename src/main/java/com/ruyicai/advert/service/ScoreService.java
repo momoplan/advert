@@ -46,6 +46,7 @@ public class ScoreService {
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("ip", ip);
 		param.put("aduid", aduid);
+		param.put("uid", uid);
 		param.put("aid", aid);
 		param.put("point", point);
 		param.put("source", source);
