@@ -38,7 +38,7 @@ public class ScoreService {
 			logger.error("力美积分墙加积分,aid为空  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return new ResponseDataScore("500", "aid为空");
 		}
-		ScoreWall scoreWall = advertManager.getScoreWall(source);
+		ScoreWall scoreWall = advertManager.getScoreWall("limei");
 		if (scoreWall==null) {
 			logger.error("力美积分墙加积分,未对接  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return new ResponseDataScore("500", "未对接");
