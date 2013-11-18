@@ -39,7 +39,7 @@ public class ScoreBind {
 	
 	public static List<String> findByMobileid(String mobileid) {
 		TypedQuery<String> q = entityManager().createQuery(
-				"SELECT distinct o.mac FROM ScoreInfo o where o.mobileid=?", String.class);
+				"SELECT distinct o.mac FROM ScoreBind o where o.mobileid=?", String.class);
 		q.setParameter(1, mobileid);
 		return q.getResultList();
 	}

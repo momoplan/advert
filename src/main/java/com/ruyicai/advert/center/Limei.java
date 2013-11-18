@@ -141,7 +141,7 @@ public class Limei extends AbstractScoreWall {
 			return response("500", "用户不存在");
 		}
 		//判断是否绑定手机号
-		String mobileId = userObject.getString("mobileId");
+		String mobileId = userObject.getString("mobileId").trim();
 		if (StringUtils.isBlank(mobileId) || StringUtils.equals(mobileId, "null")) {
 			logger.error("力美积分墙加积分,未绑定手机号  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return response("500", "未绑定手机号");
