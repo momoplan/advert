@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruyicai.advert.consts.Constants;
 import com.ruyicai.advert.domain.AdvertiseInfo;
+import com.ruyicai.advert.domain.ScoreBind;
 import com.ruyicai.advert.domain.ScoreInfo;
 import com.ruyicai.advert.service.LotteryService;
 import com.ruyicai.advert.util.HttpUtil;
@@ -133,27 +134,28 @@ public class Limei extends AbstractScoreWall {
 			logger.error("力美积分墙加积分,重复请求  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return response("500", "重复请求");
 		}
-		//判断是否是作弊用户(一个userno只能对应2个mac)
-		if (!verifyCheatUid(aduid, uid, aid)) {
-			logger.error("力美积分墙加积分,aid对应的uid大于2  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
-			return response("500", "aid对应的uid大于2");
-		}
-		//判断是否是作弊用户(一个mac只能对应2个userno)
-		if (!verifyCheatAid(aduid, uid, aid)) {
-			logger.error("力美积分墙加积分,uid对应的aid大于2  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
-			return response("500", "uid对应的aid大于2");
-		}
-		//将积分(231.0)转成不带小数点
-		NumberFormat nf = NumberFormat.getInstance();
-		point = nf.format(new BigDecimal(point));
-		//记录通知信息
-		ScoreInfo scoreInfo = recordScoreInfo(aduid, uid, aid, point, source, sign, timestamp);
 		//查询用户编号
 		JSONObject userObject = getUserByUserNo(aid);
 		String userNo = userObject.getString("userNo");
 		if (StringUtils.isBlank(userNo)) {
 			return response("500", "用户不存在");
 		}
+		//判断是否绑定手机号
+		String mobileId = userObject.getString("mobileId");
+		if (StringUtils.isBlank(mobileId) || StringUtils.equals(mobileId, "null")) {
+			logger.error("力美积分墙加积分,未绑定手机号  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+			return response("500", "未绑定手机号");
+		}
+		//判断是否是作弊用户
+		if (!verfifyCheat(mobileId, uid, idfa)) {
+			logger.error("力美积分墙加积分,用户作弊  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
+			return response("500", "用户作弊");
+		}
+		//将积分(231.0)转成不带小数点
+		NumberFormat nf = NumberFormat.getInstance();
+		point = nf.format(new BigDecimal(point));
+		//记录通知信息
+		ScoreInfo scoreInfo = recordScoreInfo(aduid, uid, aid, point, source, sign, timestamp);
 		//送彩金
 		String channel = userObject.getString("channel");
 		String errorCode = presentDividend(userNo, point, channel, "力美免费彩金");
@@ -193,34 +195,50 @@ public class Limei extends AbstractScoreWall {
 		return false;
 	}
 	
-	private boolean verifyCheatUid(String aduid, String uid, String aid) {
-		String limeiAndroidAduid = propertiesUtil.getLimeiAndroidAduid();
-		if (!StringUtils.equals(limeiAndroidAduid, aduid)) {
-			return true;
+	private boolean verfifyCheat(String mobileId, String mac, String idfa) {
+		boolean right = false;
+		//ios7及以上版本用idfa
+		if (StringUtils.equals("mac", "020000000000") && StringUtils.isNotBlank(idfa)) {
+			mac = idfa;
 		}
-		List<String> list = ScoreInfo.getDistinctUidList(aduid, aid);
-		if (list!=null&&list.size()<=2) {
-			if (list.size()==2&&!list.contains(uid)) {
-				return false;
+		List<String> list = ScoreBind.findByMobileid(mobileId);
+		if (list==null || list.size()<=0) { //没有绑定记录
+			right = true;
+		} else {
+			if (list.size()>=2 && !list.contains(mac)) {
+				right = false;
+			} else {
+				right = true;
 			}
-			return true;
 		}
-		return false;
+		if (right&&(list==null||!list.contains(mac))) {
+			new Thread(new SaveScoreBindThread(mac, mobileId)).start();
+		}
+		return right;
 	}
 	
-	private boolean verifyCheatAid(String aduid, String uid, String aid) {
-		String limeiAndroidAduid = propertiesUtil.getLimeiAndroidAduid();
-		if (!StringUtils.equals(limeiAndroidAduid, aduid)) {
-			return true;
+	private final class SaveScoreBindThread implements Runnable {
+		private String mac;
+		private String mobileId;
+		
+		public SaveScoreBindThread(String mac, String mobileId) {
+			this.mac = mac;
+			this.mobileId = mobileId;
 		}
-		List<String> list = ScoreInfo.getDistinctAidList(aduid, uid);
-		if (list!=null&&list.size()<=2) {
-			if (list.size()==2&&!list.contains(aid)) {
-				return false;
+
+		@Override
+		public void run() {
+			try {
+				ScoreBind scoreBind = new ScoreBind();
+				scoreBind.setMac(mac);
+				scoreBind.setMobileid(mobileId);
+				scoreBind.setCreatetime(new Date());
+				scoreBind.persist();
+			} catch (Exception e) {
+				logger.error("保存ScoreBind发生异常,mac="+mac+",mobileId="+mobileId, e);
 			}
-			return true;
 		}
-		return false;
+		
 	}
 	
 	private ScoreInfo recordScoreInfo(String aduid, String uid, String aid, String point, String source, String sign, String timestamp) {
@@ -256,6 +274,7 @@ public class Limei extends AbstractScoreWall {
 			}
 			JSONObject valueJsonObject = fromObject.getJSONObject("value");
 			resultObject.put("userNo", valueJsonObject.getString("userno"));
+			resultObject.put("mobileId", valueJsonObject.getString("mobileid"));
 			resultObject.put("channel", valueJsonObject.getString("channel"));
 			return resultObject;
 		} catch (Exception e) {
