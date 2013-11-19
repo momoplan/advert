@@ -124,7 +124,7 @@ public class Limei extends AbstractScoreWall {
 			return response("500", "ip不合法");
 		}
 		//验证sign
-		boolean verfySign = verfySign(aduid, uid, aid, point, source, sign, timestamp, idfa);
+		boolean verfySign = verifySign(aduid, uid, aid, point, source, sign, timestamp, idfa);
 		if (!verfySign) {
 			logger.error("力美积分墙加积分,签名错误  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return response("500", "签名错误");
@@ -147,7 +147,7 @@ public class Limei extends AbstractScoreWall {
 			return response("500", "未绑定手机号");
 		}
 		//判断是否是作弊用户
-		if (!verfifyCheat(mobileId, uid, idfa)) {
+		if (!verifyCheat(mobileId, uid, idfa)) {
 			logger.error("力美积分墙加积分,用户作弊  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return response("500", "用户作弊");
 		}
@@ -166,7 +166,7 @@ public class Limei extends AbstractScoreWall {
 		return response("500", "赠送失败");
 	}
 	
-	private boolean verfySign(String aduid, String uid, String aid, String point, String source, String sign, String timestamp,
+	private boolean verifySign(String aduid, String uid, String aid, String point, String source, String sign, String timestamp,
 			String idfa) {
 		try {
 			StringBuilder builder = new StringBuilder();
@@ -195,7 +195,7 @@ public class Limei extends AbstractScoreWall {
 		return false;
 	}
 	
-	private boolean verfifyCheat(String mobileId, String mac, String idfa) {
+	private boolean verifyCheat(String mobileId, String mac, String idfa) {
 		boolean right = false;
 		//ios7及以上版本用idfa
 		if (StringUtils.isNotBlank(idfa) && (StringUtils.equals(mac, "020000000000")
