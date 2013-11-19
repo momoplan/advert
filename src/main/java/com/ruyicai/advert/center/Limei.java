@@ -198,7 +198,8 @@ public class Limei extends AbstractScoreWall {
 	private boolean verfifyCheat(String mobileId, String mac, String idfa) {
 		boolean right = false;
 		//ios7及以上版本用idfa
-		if (StringUtils.equals("mac", "020000000000") && StringUtils.isNotBlank(idfa)) {
+		if (StringUtils.isNotBlank(idfa) && (StringUtils.equals(mac, "020000000000")
+				||StringUtils.isBlank(mac))) {
 			mac = idfa;
 		}
 		List<String> list = ScoreBind.findByMobileid(mobileId);
