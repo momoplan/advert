@@ -151,9 +151,9 @@ public class Limei extends AbstractScoreWall {
 			logger.error("力美积分墙加积分,用户作弊  aduid="+aduid+";uid="+uid+";aid="+aid+";point="+point+";source="+source);
 			return response("500", "用户作弊");
 		}
-		//将积分(231.0)转成不带小数点
+		//将积分(231.0)转成不带小数点,1242会转成(1,1242)
 		NumberFormat nf = NumberFormat.getInstance();
-		point = nf.format(new BigDecimal(point));
+		point = nf.format(new BigDecimal(point)).replaceAll(",", "");
 		//记录通知信息
 		ScoreInfo scoreInfo = recordScoreInfo(aduid, uid, aid, point, source, sign, timestamp);
 		//送彩金
