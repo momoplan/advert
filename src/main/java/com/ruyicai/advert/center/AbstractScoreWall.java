@@ -110,7 +110,7 @@ public abstract class AbstractScoreWall implements ScoreWall, ApplicationListene
 		advertiseInfo.setAppid(appId);
 		advertiseInfo.setSource(source);
 		advertiseInfo.setCreatetime(new Date());
-		advertiseInfo.setUpdatetime(new Date());
+		//advertiseInfo.setUpdatetime(new Date());
 		advertiseInfo.setState("1");
 		advertiseInfo.persist();
 	}
@@ -127,7 +127,7 @@ public abstract class AbstractScoreWall implements ScoreWall, ApplicationListene
 		advertiseInfo.setDrkey(drkey);
 		advertiseInfo.setSource(source);
 		advertiseInfo.setCreatetime(new Date());
-		advertiseInfo.setUpdatetime(new Date());
+		//advertiseInfo.setUpdatetime(new Date());
 		advertiseInfo.setState("1");
 		advertiseInfo.persist();
 	}

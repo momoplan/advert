@@ -31,7 +31,7 @@ public class AdvertiseService {
 		if (StringUtils.isBlank(mac)) {
 			return new ResponseData(false, "参数为空");
 		}
-		ScoreWall scoreWall = advertManager.getScoreWall(source);
+		ScoreWall scoreWall = advertManager.getScoreWall("limei");
 		if (scoreWall==null) {
 			logger.error("力美广告点击记录未对接,mac="+mac+",appId="+appId+",source="+source+",ip="+ip);
 			return new ResponseData(false, "未对接");
@@ -57,7 +57,7 @@ public class AdvertiseService {
 		if (StringUtils.isBlank(drkey) || drkey.length()<32) {
 			return new ResponseData(false, "参数不合法");
 		}
-		ScoreWall scoreWall = advertManager.getScoreWall(source);
+		ScoreWall scoreWall = advertManager.getScoreWall("diarnu");
 		if (scoreWall==null) {
 			logger.error("点入广告点击记录未对接,drkey="+drkey+",source="+source+",ip="+ip);
 			return new ResponseData(false, "未对接");
@@ -83,7 +83,7 @@ public class AdvertiseService {
 		if (StringUtils.isBlank(mac)) {
 			return new ResponseData(false, "参数为空");
 		}
-		ScoreWall scoreWall = advertManager.getScoreWall(source);
+		ScoreWall scoreWall = advertManager.getScoreWall("domob");
 		if (scoreWall==null) {
 			logger.error("多盟广告点击记录未对接,mac="+mac+",appId="+appId+",source="+source+",returnFormat="+returnFormat+",ip="+ip);
 			return new ResponseData(false, "未对接");
@@ -111,7 +111,7 @@ public class AdvertiseService {
 		if (StringUtils.isBlank(mac)) {
 			return new ResponseData(false, "参数为空");
 		}
-		ScoreWall scoreWall = advertManager.getScoreWall(source);
+		ScoreWall scoreWall = advertManager.getScoreWall("miidi");
 		if (scoreWall==null) {
 			logger.error("米迪广告点击记录未对接,mac="+mac+",appId="+appId+",source="+source+",ip="+ip);
 			return new ResponseData(false, "未对接");
