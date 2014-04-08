@@ -25,8 +25,10 @@ public class RoutesConfiguration {
 				public void configure() throws Exception {
 					deadLetterChannel("jms:queue:dead").maximumRedeliveries(-1)
 					.redeliveryDelay(3000);
-					from("jms:queue:VirtualTopicConsumers.advert.notifyThirdParty?concurrentConsumers=5").to(
-							"bean:notifyThirdPartyListener?method=notify").routeId("请求第三方的通知");
+					from("jms:queue:VirtualTopicConsumers.advert.notifyThirdParty?concurrentConsumers=10").to(
+							"bean:notifyThirdPartyListener?method=notify").routeId("注册请求第三方的通知");
+					from("jms:queue:VirtualTopicConsumers.advert.iphoneScoreWallActive?concurrentConsumers=10").to(
+							"bean:iphoneScoreWallActiveListener?method=process").routeId("激活请求第三方的通知");
 				}
 			});
 		} catch (Exception e) {

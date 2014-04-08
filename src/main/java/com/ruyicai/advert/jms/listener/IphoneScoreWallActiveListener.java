@@ -13,25 +13,20 @@ import com.ruyicai.advert.domain.UserInf;
 import com.ruyicai.advert.util.AdvertiseUtil;
 import com.ruyicai.advert.util.StringUtil;
 
-/**
- *  通知第三方的jms
- * @author Administrator
- *
- */
 @Service
-public class NotifyThirdPartyListener {
+public class IphoneScoreWallActiveListener {
 
-	private Logger logger = Logger.getLogger(NotifyThirdPartyListener.class);
+	private Logger logger = Logger.getLogger(IphoneScoreWallActiveListener.class);
 	
 	@Autowired
 	private AdvertiseUtil advertiseUtil;
 	
-	public void notify(@Header("imei") String imei, @Header("platform") String platform, @Header("mac") String mac) {
+	public void process(@Header("mac") String mac) {
 		try {
-			logger.info("注册通知第三方的Jms start "+"imei="+imei+";platform="+platform+";mac="+mac);
+			logger.info("激活通知第三方的Jms start "+"mac="+mac);
 			long startMillis = System.currentTimeMillis();
 			if (StringUtil.isEmpty(mac)) {
-				return;
+				return ;
 			}
 			//查用户表,防止通过其他渠道激活的用户通知第三方
 			List<UserInf> list = UserInf.getListByMacPlatform(mac, Platform.iPhone.value());
@@ -41,24 +36,17 @@ public class NotifyThirdPartyListener {
 				if (StringUtil.isEmpty(source)) { //通过其他渠道激活
 					return;
 				}
-				if (StringUtils.equals(source, AdvertiseSource.ruanlie.value())) { //按激活算的
+				if (!StringUtils.equals(source, AdvertiseSource.ruanlie.value())) {
 					return;
 				}
 				//通知第三方积分墙
 				AdvertiseInfo advertiseInfo = advertiseUtil.getValidAdvertiseInfo(mac, source);
 				advertiseUtil.notifyThirdParty(advertiseInfo);
-			} else { //由于客户端的原因,没有激活记录就注册的,也要通知第三方
-				AdvertiseInfo advertiseInfo = advertiseUtil.getValidAdvertiseInfo(mac);
-				if (advertiseInfo!=null&&
-						StringUtils.equals(advertiseInfo.getSource(), AdvertiseSource.ruanlie.value())) { //按激活算的
-					return;
-				}
-				advertiseUtil.notifyThirdParty(advertiseInfo); //通知第三方
 			}
 			long endMillis = System.currentTimeMillis();
-			logger.info("注册通知第三方,用时:"+(endMillis-startMillis)+",mac="+mac);
+			logger.info("激活通知第三方,用时:"+(endMillis-startMillis)+",mac="+mac);
 		} catch (Exception e) {
-			logger.error("通知第三方时发生异常imei="+imei+",mac="+mac, e);
+			logger.error("激活通知第三方时发生异常,mac="+mac, e);
 		}
 	}
 	
