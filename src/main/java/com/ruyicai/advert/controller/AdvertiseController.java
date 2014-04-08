@@ -148,7 +148,7 @@ public class AdvertiseController {
 			logger.info("软猎广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac+",idfa="+idfa);
 		} catch (RuanlieException e) {
 			errorCode = e.getErrorCode();
-			logger.error("软猎广告点击记录内部异常,code="+errorCode.value+",desc="+errorCode.memo+",mac="+mac+",idfa="+idfa, e);
+			logger.error("软猎广告点击记录内部异常,code="+errorCode.value+",desc="+errorCode.memo+",mac="+mac+",idfa="+idfa);
 		} catch (Exception e) {
 			errorCode = RuanlieErrorCode.exception;
 			logger.error("软猎广告点击记录发生异常,mac="+mac+",idfa="+idfa, e);
