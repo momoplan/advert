@@ -60,6 +60,12 @@ public class PropertiesUtil {
 		return miidi_notifyUrl;
 	}
 	
+	@Value("${ruanlie.ip}")
+	private String ruanlieIp;
+	public String getRuanlieIp() {
+		return ruanlieIp;
+	}
+	
 	@Value("${lotteryUrl}")
 	private String lotteryUrl;
 	public String getLotteryUrl() {

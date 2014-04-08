@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ruyicai.advert.consts.RuanlieErrorCode;
+import com.ruyicai.advert.controller.resp.RuanlieResponseData;
+import com.ruyicai.advert.dto.RuanlieResultDto;
+import com.ruyicai.advert.exception.RuanlieException;
 import com.ruyicai.advert.service.AdvertiseService;
 
 /**
@@ -119,6 +124,38 @@ public class AdvertiseController {
 			logger.error("米迪广告点击记录发生异常,mac="+mac+",appId="+appId, e);
 			return new ResponseData(false, "通知失败");
 		}
+	}
+	
+	/**
+	 * 软猎广告
+	 * @param request
+	 * @param mac
+	 * @param appid
+	 * @param source
+	 * @return
+	 */
+	@RequestMapping(value = "/ruanlieNotify", method = RequestMethod.GET)
+	public @ResponseBody
+		RuanlieResponseData ruanlieNotify(HttpServletRequest request, @RequestParam(value = "mac") String mac, 
+				@RequestParam(value = "idfa") String idfa, @RequestParam(value = "appId") String appId) {
+		RuanlieResponseData rd = new RuanlieResponseData();
+		RuanlieErrorCode errorCode = RuanlieErrorCode.success;
+		try {
+			long startTimeMillis = System.currentTimeMillis();
+			String ip = request.getHeader("X-Forwarded-For");
+			//ResponseData response = advertiseService.miidiReceive(ip, mac, appId, source);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("软猎广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac+",idfa="+idfa);
+		} catch (RuanlieException e) {
+			errorCode = e.getErrorCode();
+			logger.error("软猎广告点击记录内部异常,code="+errorCode.value+",desc="+errorCode.memo+",mac="+mac+",idfa="+idfa, e);
+		} catch (Exception e) {
+			errorCode = RuanlieErrorCode.exception;
+			logger.error("软猎广告点击记录发生异常,mac="+mac+",idfa="+idfa, e);
+		}
+		RuanlieResultDto dto = new RuanlieResultDto(errorCode);
+		rd.setResult(dto);
+		return rd;
 	}
 	
 }

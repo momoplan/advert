@@ -7,7 +7,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruyicai.advert.center.ScoreWall;
+import com.ruyicai.advert.consts.RuanlieErrorCode;
 import com.ruyicai.advert.controller.ResponseData;
+import com.ruyicai.advert.exception.RuanlieException;
 
 @Service
 public class AdvertiseService {
@@ -123,6 +125,31 @@ public class AdvertiseService {
 		param.put("source", source);
 		Map<String, Object> resultMap = scoreWall.receiveAdvertise(param);
 		return new ResponseData((Boolean)resultMap.get("success"), (String)resultMap.get("message"));
+	}
+	
+	/**
+	 * 软猎广告通知
+	 * @param ip
+	 * @param mac
+	 * @param idfa
+	 * @param appId
+	 */
+	public void ruanlieReceive(String ip, String mac, String idfa, String appId) {
+		//验证参数
+		if (StringUtils.isBlank(mac)&&StringUtils.isBlank(idfa)) {
+			throw new RuanlieException(RuanlieErrorCode.paramException);
+		}
+		ScoreWall scoreWall = advertManager.getScoreWall("ruanlie");
+		if (scoreWall==null) {
+			logger.error("软猎广告点击记录未对接,mac="+mac+",idfa="+idfa+",appId="+appId+",ip="+ip);
+			throw new RuanlieException(RuanlieErrorCode.exception);
+		}
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("ip", ip);
+		param.put("mac", mac);
+		param.put("idfa", idfa);
+		param.put("appId", appId);
+		scoreWall.receiveAdvertise(param);
 	}
 	
 }
