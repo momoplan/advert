@@ -10,6 +10,7 @@ import com.ruyicai.advert.consts.AdvertiseSource;
 import com.ruyicai.advert.consts.RuanlieErrorCode;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.exception.RuanlieException;
+import com.ruyicai.advert.util.HttpUtil;
 import com.ruyicai.advert.util.PropertiesUtil;
 
 @Component("ruanlie")
@@ -59,8 +60,19 @@ public class Ruanlie extends AbstractScoreWall {
 
 	@Override
 	public void notifyActivate(AdvertiseInfo advertiseInfo) {
-		// TODO Auto-generated method stub
+		String adMac = advertiseInfo.getMac(); //广告传过来的mac地址
+		String appId = advertiseInfo.getAppid(); //app标识
 		
+		String mac = "";
+		String idfa = "";
+		if (StringUtils.indexOf(adMac, ":")>-1) {
+			mac = adMac;
+		} else {
+			idfa = adMac;
+		}
+		String url = propertiesUtil.getRuanlie_notifyUrl()+"?mac="+mac+"&idfa="+idfa+"&appId="+appId;
+		String result = HttpUtil.sendRequestByGet(url, true);
+		logger.info("广告通知软猎返回:"+result+";adMac="+adMac);
 	}
 
 	@Override

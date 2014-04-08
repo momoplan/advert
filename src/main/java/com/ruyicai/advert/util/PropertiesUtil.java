@@ -66,6 +66,12 @@ public class PropertiesUtil {
 		return ruanlieIp;
 	}
 	
+	@Value("${ruanlie.notifyUrl}")
+	private String ruanlie_notifyUrl;
+	public String getRuanlie_notifyUrl() {
+		return ruanlie_notifyUrl;
+	}
+	
 	@Value("${lotteryUrl}")
 	private String lotteryUrl;
 	public String getLotteryUrl() {

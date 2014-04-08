@@ -636,6 +636,7 @@
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>10.161.141.29</ruanlie.ip>
+				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -661,6 +662,7 @@
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>10.161.141.29</ruanlie.ip>
+				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -686,6 +688,7 @@
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>10.161.141.29</ruanlie.ip>
+				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
 				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>
 			</properties>
 		</profile>
