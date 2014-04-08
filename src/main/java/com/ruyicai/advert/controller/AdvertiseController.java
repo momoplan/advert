@@ -143,7 +143,7 @@ public class AdvertiseController {
 		try {
 			long startTimeMillis = System.currentTimeMillis();
 			String ip = request.getHeader("X-Forwarded-For");
-			//ResponseData response = advertiseService.miidiReceive(ip, mac, appId, source);
+			advertiseService.ruanlieReceive(ip, mac, idfa, appId);
 			long endTimeMillis = System.currentTimeMillis();
 			logger.info("软猎广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac+",idfa="+idfa);
 		} catch (RuanlieException e) {
