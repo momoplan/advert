@@ -2,7 +2,7 @@ package com.ruyicai.advert.consts;
 
 public enum DomobErrorCode {
 
-	success(true, "success"), //成功
+	success(true, "ok"), //成功
 	paramException(false, "paramException"), //参数异常
 	exception(false, "Exception"); //未知错误
 	
