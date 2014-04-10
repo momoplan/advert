@@ -33,7 +33,6 @@ public class Ruanlie extends AbstractScoreWall {
 		String mac = param.get("mac");
 		String idfa = param.get("idfa");
 		String appId = param.get("appId");
-		logger.info("软猎广告点击记录 start mac="+mac+";idfa="+idfa+";appId="+appId+";ip="+ip);
 		//验证ip
 		boolean verfyIp = verfyIp(ip, getIp());
 		if (!verfyIp) {
@@ -77,7 +76,6 @@ public class Ruanlie extends AbstractScoreWall {
 
 	@Override
 	public Map<String, Object> addScore(Map<String, String> param) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

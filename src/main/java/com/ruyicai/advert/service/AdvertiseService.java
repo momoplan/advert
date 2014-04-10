@@ -135,6 +135,7 @@ public class AdvertiseService {
 	 * @param appId
 	 */
 	public void ruanlieReceive(String ip, String mac, String idfa, String appId) {
+		logger.info("软猎广告点击记录 start mac="+mac+";idfa="+idfa+";appId="+appId+";ip="+ip);
 		//验证参数
 		if (StringUtils.isBlank(mac)&&StringUtils.isBlank(idfa)) {
 			throw new RuanlieException(RuanlieErrorCode.paramException);

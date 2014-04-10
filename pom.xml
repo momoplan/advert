@@ -635,7 +635,7 @@
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
-				<ruanlie.ip>10.161.141.29</ruanlie.ip>
+				<ruanlie.ip>115.29.229.242</ruanlie.ip>
 				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
@@ -661,7 +661,7 @@
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
-				<ruanlie.ip>10.161.141.29</ruanlie.ip>
+				<ruanlie.ip>115.29.229.242</ruanlie.ip>
 				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
@@ -687,7 +687,7 @@
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
-				<ruanlie.ip>10.161.141.29</ruanlie.ip>
+				<ruanlie.ip>115.29.229.242</ruanlie.ip>
 				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
 				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>
 			</properties>
