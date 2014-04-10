@@ -91,7 +91,6 @@ public class AdvertiseController {
 		DomobResponseData domobNotify(HttpServletRequest request, @RequestParam("appId") String appId, 
 				@RequestParam("mac") String mac,  @RequestParam("ifa") String idfa, 
 				@RequestParam("source") String source) {
-		//DomobResponseData rd = new DomobResponseData();
 		DomobErrorCode errorCode = DomobErrorCode.success;
 		try {
 			long startTimeMillis = System.currentTimeMillis();
@@ -105,7 +104,6 @@ public class AdvertiseController {
 		} catch (Exception e) {
 			errorCode = DomobErrorCode.exception;
 			logger.error("多盟广告点击记录发生异常,mac="+mac+",idfa="+idfa, e);
-			//return new ResponseData(false, "通知失败");
 		}
 		DomobResponseData rd = new DomobResponseData(errorCode);
 		return rd;

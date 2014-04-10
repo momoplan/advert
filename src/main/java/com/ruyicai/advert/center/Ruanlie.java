@@ -45,14 +45,14 @@ public class Ruanlie extends AbstractScoreWall {
 		boolean verifyActivate = verifyActivate(mac);
 		if (!verifyActivate) {
 			logger.error("软猎广告点击记录,已被激活 mac="+mac);
-			throw new RuanlieException(RuanlieErrorCode.exception);
+			throw new RuanlieException(RuanlieErrorCode.hasActive);
 		}
 		List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceAppid(mac, source, appId);
 		if (list==null||list.size()==0) {
 			//保存记录
 			saveAdvertiseInfoByAppid(mac, appId, source);
 		} else {
-			throw new RuanlieException(RuanlieErrorCode.exception);
+			throw new RuanlieException(RuanlieErrorCode.repeatRecord);
 		}
 		return null;
 	}

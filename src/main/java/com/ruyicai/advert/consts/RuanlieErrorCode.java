@@ -3,8 +3,10 @@ package com.ruyicai.advert.consts;
 public enum RuanlieErrorCode {
 
 	success("000000", "ok"), //成功
-	exception("100000", "Exception"), //未知错误
-	paramException("100001", "paramException"); //参数异常
+	paramException("100001", "paramException"), //参数异常
+	repeatRecord("100000", "repeatRecord"), //重复记录
+	hasActive("100000", "hasActive"), //已激活
+	exception("100000", "Exception"); //未知错误
 	
 	public String value;
 	
