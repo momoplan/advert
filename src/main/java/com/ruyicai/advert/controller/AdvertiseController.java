@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ruyicai.advert.consts.DomobErrorCode;
 import com.ruyicai.advert.consts.RuanlieErrorCode;
+import com.ruyicai.advert.controller.resp.DomobResponseData;
 import com.ruyicai.advert.controller.resp.RuanlieResponseData;
 import com.ruyicai.advert.dto.RuanlieResultDto;
+import com.ruyicai.advert.exception.DomobException;
 import com.ruyicai.advert.exception.RuanlieException;
 import com.ruyicai.advert.service.AdvertiseService;
 
@@ -85,20 +88,27 @@ public class AdvertiseController {
 	 */
 	@RequestMapping(value = "/domobNotify", method = RequestMethod.GET)
 	public @ResponseBody 
-		ResponseData domobNotify(HttpServletRequest request, @RequestParam("udid") String mac, 
-				@RequestParam("app") String appId,  @RequestParam("source") String source, 
-				@RequestParam("returnFormat") String returnFormat) {
+		DomobResponseData domobNotify(HttpServletRequest request, @RequestParam("appId") String appId, 
+				@RequestParam("mac") String mac,  @RequestParam("ifa") String idfa, 
+				@RequestParam("source") String source) {
+		//DomobResponseData rd = new DomobResponseData();
+		DomobErrorCode errorCode = DomobErrorCode.success;
 		try {
 			long startTimeMillis = System.currentTimeMillis();
 			String ip = request.getHeader("X-Forwarded-For");
-			ResponseData response = advertiseService.domobReceive(ip, mac, appId, source, returnFormat);
+			advertiseService.domobReceive(ip, appId, mac, idfa, source);
 			long endTimeMillis = System.currentTimeMillis();
-			logger.info("多盟广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
-			return response;
+			logger.info("多盟广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac+",idfa="+idfa);
+		} catch (DomobException e) {
+			errorCode = e.getErrorCode();
+			logger.error("多盟广告点击记录内部异常,message="+errorCode.memo+",mac="+mac+",idfa="+idfa);
 		} catch (Exception e) {
-			logger.error("多盟广告点击记录发生异常,mac="+mac+",appId="+appId, e);
-			return new ResponseData(false, "通知失败");
+			errorCode = DomobErrorCode.exception;
+			logger.error("多盟广告点击记录发生异常,mac="+mac+",idfa="+idfa, e);
+			//return new ResponseData(false, "通知失败");
 		}
+		DomobResponseData rd = new DomobResponseData(errorCode);
+		return rd;
 	}
 	
 	/**

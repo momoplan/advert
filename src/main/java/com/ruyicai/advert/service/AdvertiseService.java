@@ -7,8 +7,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruyicai.advert.center.ScoreWall;
+import com.ruyicai.advert.consts.DomobErrorCode;
 import com.ruyicai.advert.consts.RuanlieErrorCode;
 import com.ruyicai.advert.controller.ResponseData;
+import com.ruyicai.advert.exception.DomobException;
 import com.ruyicai.advert.exception.RuanlieException;
 
 @Service
@@ -80,24 +82,24 @@ public class AdvertiseService {
 	 * @param returnFormat
 	 * @return
 	 */
-	public ResponseData domobReceive(String ip, String mac, String appId, String source, String returnFormat) {
+	public void domobReceive(String ip, String appId, String mac, String idfa, String source) {
+		logger.info("多盟广告点击记录 start appId="+appId+";mac="+mac+";idfa="+idfa+";source="+source+";ip="+ip);
 		//验证参数为空
-		if (StringUtils.isBlank(mac)) {
-			return new ResponseData(false, "参数为空");
+		if (StringUtils.isBlank(mac)&&StringUtils.isBlank(idfa)) {
+			throw new DomobException(DomobErrorCode.paramException);
 		}
 		ScoreWall scoreWall = advertManager.getScoreWall("domob");
 		if (scoreWall==null) {
-			logger.error("多盟广告点击记录未对接,mac="+mac+",appId="+appId+",source="+source+",returnFormat="+returnFormat+",ip="+ip);
-			return new ResponseData(false, "未对接");
+			logger.error("多盟广告点击记录未对接,mac="+mac+",idfa="+idfa+",ip="+ip);
+			throw new DomobException(DomobErrorCode.exception);
 		}
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("ip", ip);
-		param.put("mac", mac);
 		param.put("appId", appId);
+		param.put("mac", mac);
+		param.put("idfa", idfa);
 		param.put("source", source);
-		param.put("returnFormat", returnFormat);
-		Map<String, Object> resultMap = scoreWall.receiveAdvertise(param);
-		return new ResponseData((Boolean)resultMap.get("success"), (String)resultMap.get("message"));
+		scoreWall.receiveAdvertise(param);
 	}
 	
 	/**
