@@ -8,7 +8,7 @@ public enum AdvertiseSource {
 	dianRu("diarnu", "点入", "937"),
 	duoMeng("domob", "多盟", "938"),
 	//miidi("miidi", "米迪", "1030");
-	ruanlie("ruanlie", "软猎", "");
+	ruanlie("ruanlie", "软猎", "1068");
 	
 	private String value;
 	
