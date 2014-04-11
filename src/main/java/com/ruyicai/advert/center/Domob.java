@@ -30,7 +30,7 @@ public class Domob extends AbstractScoreWall {
 	
 	@Override
 	public Map<String, Object> receiveAdvertise(Map<String, String> param) {
-		//String ip = param.get("ip");
+		String ip = param.get("ip");
 		String appId = param.get("appId");
 		String mac = param.get("mac");
 		String idfa = param.get("idfa");

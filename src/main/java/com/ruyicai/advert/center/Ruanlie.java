@@ -30,7 +30,6 @@ public class Ruanlie extends AbstractScoreWall {
 	
 	@Override
 	public Map<String, Object> receiveAdvertise(Map<String, String> param) {
-		String source = AdvertiseSource.ruanlie.value();
 		String ip = param.get("ip");
 		String mac = param.get("mac");
 		String idfa = param.get("idfa");
@@ -49,6 +48,7 @@ public class Ruanlie extends AbstractScoreWall {
 			logger.error("软猎广告点击记录,已被激活 mac="+mac);
 			throw new RuanlieException(RuanlieErrorCode.hasActive);
 		}
+		String source = AdvertiseSource.ruanlie.value();
 		List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceAppid(mac, source, appId);
 		if (list==null||list.size()==0) {
 			//保存记录
