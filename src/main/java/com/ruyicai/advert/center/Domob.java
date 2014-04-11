@@ -47,14 +47,14 @@ public class Domob extends AbstractScoreWall {
 		boolean verifyActivate = verifyActivate(mac);
 		if (!verifyActivate) {
 			logger.error("多盟广告点击记录,已被激活 mac="+mac);
-			throw new DomobException(DomobErrorCode.exception);
+			throw new DomobException(DomobErrorCode.hasActive);
 		}
 		List<AdvertiseInfo> list = AdvertiseInfo.getListByMacSourceAppid(mac, source, appId);
 		if (list==null||list.size()==0) {
 			//保存记录
 			saveAdvertiseInfoByAppid(mac, appId, source);
 		} else {
-			throw new DomobException(DomobErrorCode.exception);
+			throw new DomobException(DomobErrorCode.repeatRecord);
 		}
 		return null;
 	}
