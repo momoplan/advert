@@ -25,7 +25,7 @@ public class Domob extends AbstractScoreWall {
 	
 	@Override
 	public void init() {
-		
+		this.setIp(propertiesUtil.getDomobIp());
 	}
 	
 	@Override
@@ -35,6 +35,12 @@ public class Domob extends AbstractScoreWall {
 		String mac = param.get("mac");
 		String idfa = param.get("idfa");
 		String source = param.get("source");
+		//验证ip
+		boolean verfyIp = verfyIp(ip, getIp());
+		if (!verfyIp) {
+			logger.error("多盟广告点击记录,ip不合法 mac="+mac+";idfa="+idfa+";appId="+appId+";ip="+ip);
+			throw new DomobException(DomobErrorCode.exception);
+		}
 		//取设备唯一标识
 		mac = (StringUtils.isNotBlank(mac)&&!StringUtils.equals(mac, "02:00:00:00:00:00")) ? mac : idfa;
 		//验证是否已激活

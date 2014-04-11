@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PropertiesUtil {
 
+	//力美
 	@Value("${limei.ip}")
 	private String limei_ip;
 	public String getLimei_ip() {
@@ -24,6 +25,7 @@ public class PropertiesUtil {
 		return limeiAndroidAduid;
 	}
 
+	//点乐
 	@Value("${dianjoy.salt}")
 	private String dianjoy_salt;
 	public String getDianjoy_salt() {
@@ -36,6 +38,7 @@ public class PropertiesUtil {
 		return dianjoy_notifyUrl;
 	}
 	
+	//点入
 	@Value("${dianru.ip}")
 	private String dianru_ip;
 	public String getDianru_ip() {
@@ -48,18 +51,27 @@ public class PropertiesUtil {
 		return dianru_notifyUrl;
 	}
 	
+	//多盟
+	@Value("${domob.ip}")
+	private String domobIp;
+	public String getDomobIp() {
+		return domobIp;
+	}
+	
 	@Value("${domob.notifyUrl}")
 	private String domob_notifyUrl;
 	public String getDomob_notifyUrl() {
 		return domob_notifyUrl;
 	}
 	
+	//米迪
 	@Value("${miidi.notifyUrl}")
 	private String miidi_notifyUrl;
 	public String getMiidi_notifyUrl() {
 		return miidi_notifyUrl;
 	}
 	
+	//软猎
 	@Value("${ruanlie.ip}")
 	private String ruanlieIp;
 	public String getRuanlieIp() {
@@ -72,6 +84,7 @@ public class PropertiesUtil {
 		return ruanlie_notifyUrl;
 	}
 	
+	//磨盘
 	@Value("${mopan.ip}")
 	private String mopanIp;
 	public String getMopanIp() {

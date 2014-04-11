@@ -633,6 +633,7 @@
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.ip>211.155.87.227</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
+				<domob.ip>119.255.14.210</domob.ip>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>115.29.229.242</ruanlie.ip>
@@ -661,6 +662,7 @@
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.ip>211.155.87.227</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
+				<domob.ip>119.255.14.210</domob.ip>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>115.29.229.242</ruanlie.ip>
@@ -689,6 +691,7 @@
 				<dianjoy.notifyUrl>http://www.dianjoy.com/dev/ios/adnotify.php</dianjoy.notifyUrl>
 				<dianru.ip>211.155.87.227</dianru.ip>
 				<dianru.notifyUrl>http://api.wall.dianru.com/adwall/ios/returndata.ashx</dianru.notifyUrl>
+				<domob.ip>119.255.14.210</domob.ip>
 				<domob.notifyUrl>http://e.domob.cn/track/ow/api</domob.notifyUrl>
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>115.29.229.242</ruanlie.ip>
