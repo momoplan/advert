@@ -10,10 +10,12 @@ import com.ruyicai.advert.center.ScoreWall;
 import com.ruyicai.advert.consts.DomobErrorCode;
 import com.ruyicai.advert.consts.MopanErrorCode;
 import com.ruyicai.advert.consts.RuanlieErrorCode;
+import com.ruyicai.advert.consts.WangyuErrorCode;
 import com.ruyicai.advert.controller.ResponseData;
 import com.ruyicai.advert.exception.DomobException;
 import com.ruyicai.advert.exception.MopanException;
 import com.ruyicai.advert.exception.RuanlieException;
+import com.ruyicai.advert.exception.WangyuException;
 
 @Service
 public class AdvertiseService {
@@ -179,6 +181,30 @@ public class AdvertiseService {
 		param.put("ip", ip);
 		param.put("mac", mac);
 		param.put("appId", appId);
+		scoreWall.receiveAdvertise(param);
+	}
+	
+	/**
+	 * 网域广告通知
+	 * @param ip
+	 * @param cid
+	 * @param deviceid
+	 */
+	public void wangyuReceive(String ip, String cid, String deviceid) {
+		logger.info("网域广告点击记录 start mac="+deviceid+";cid="+cid+";ip="+ip);
+		//验证参数
+		if (StringUtils.isBlank(deviceid)) {
+			throw new WangyuException(WangyuErrorCode.paramException);
+		}
+		ScoreWall scoreWall = advertManager.getScoreWall("wangyu");
+		if (scoreWall==null) {
+			logger.error("网域广告点击记录未对接,mac="+deviceid+",cid="+cid+",ip="+ip);
+			throw new WangyuException(WangyuErrorCode.exception);
+		}
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("ip", ip);
+		param.put("cid", cid);
+		param.put("deviceid", deviceid);
 		scoreWall.receiveAdvertise(param);
 	}
 	

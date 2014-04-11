@@ -97,6 +97,19 @@ public class PropertiesUtil {
 		return mopan_notifyUrl;
 	}
 	
+	//网域
+	@Value("${wangyu.ip}")
+	private String wangyuIp;
+	public String getWangyuIp() {
+		return wangyuIp;
+	}
+	
+	@Value("${wangyu.notifyUrl}")
+	private String wangyu_notifyUrl;
+	public String getWangyu_notifyUrl() {
+		return wangyu_notifyUrl;
+	}
+	
 	@Value("${lotteryUrl}")
 	private String lotteryUrl;
 	public String getLotteryUrl() {
