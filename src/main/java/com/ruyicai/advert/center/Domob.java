@@ -80,7 +80,7 @@ public class Domob extends AbstractScoreWall {
 			String url = propertiesUtil.getDomob_notifyUrl()+"?appId="+appId+"&udid="+mac+"&ifa="+idfa+
 					"&acttime="+acttime+"&returnFormat=1"+"&sign="+sign;
 			result = HttpUtil.sendRequestByGet(url, true);
-			logger.info("广告通知多盟返回:"+result+";mac="+mac+";requestCount="+requestCount);
+			logger.info("广告通知多盟返回:"+result+";adMac="+adMac+";requestCount="+requestCount);
 			if (!StringUtil.isEmpty(result)) {
 				JSONObject fromObject = JSONObject.fromObject(result);
 				boolean success = fromObject.getBoolean("success");
@@ -115,8 +115,8 @@ public class Domob extends AbstractScoreWall {
 	}
 	
 	/*public static void main(String[] args) {
-		String string = Tools.md5("4498731,7C:AB:A3:D6:E7:81,,511F7987-6E2F-423A-BFED-E4C52CB5A6DC,,123456");
-		System.out.println(string);
+		//String string = Tools.md5("4498731,7C:AB:A3:D6:E7:81,,511F7987-6E2F-423A-BFED-E4C52CB5A6DC,,123456");
+		//System.out.println(string);
 		
 		String sign = new Domob().getSign("492164095", "E8:8D:28:D6:4A:B6", "");
 		System.out.println(sign);

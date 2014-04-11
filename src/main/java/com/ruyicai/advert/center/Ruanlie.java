@@ -2,6 +2,7 @@ package com.ruyicai.advert.center;
 
 import java.util.List;
 import java.util.Map;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.exception.RuanlieException;
 import com.ruyicai.advert.util.HttpUtil;
 import com.ruyicai.advert.util.PropertiesUtil;
+import com.ruyicai.advert.util.StringUtil;
 
 @Component("ruanlie")
 public class Ruanlie extends AbstractScoreWall {
@@ -69,14 +71,43 @@ public class Ruanlie extends AbstractScoreWall {
 		} else {
 			idfa = adMac;
 		}
-		String url = propertiesUtil.getRuanlie_notifyUrl()+"?mac="+mac+"&idfa="+idfa+"&appId="+appId;
-		String result = HttpUtil.sendRequestByGet(url, true);
-		logger.info("广告通知软猎返回:"+result+";adMac="+adMac);
+		
+		String result = "";
+		int requestCount = 1;
+		while (StringUtil.isEmpty(result) && requestCount<4) {
+			String url = propertiesUtil.getRuanlie_notifyUrl()+"?mac="+mac+"&idfa="+idfa+"&appId="+appId;
+			result = HttpUtil.sendRequestByGet(url, true);
+			//{"result":{"code":"000000","desc":"OK"}}
+			logger.info("广告通知软猎返回:"+result+";adMac="+adMac+";requestCount="+requestCount);
+			if (StringUtils.isNotBlank(result)) {
+				JSONObject fromObject = JSONObject.fromObject(result);
+				String code = fromObject.getJSONObject("result").getString("code");
+				if (StringUtils.equals(code, "000000")) { //成功
+					updateAdvertiseInfoState(advertiseInfo); //更新AdvertiseInfo表的状态
+				}
+			} else {
+				requestCount++;
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@Override
 	public Map<String, Object> addScore(Map<String, String> param) {
 		return null;
 	}
+	
+	/*public static void main(String[] args) {
+		String result = "{\"result\":{\"code\":\"000000\",\"desc\":\"OK\"}}";
+		JSONObject fromObject = JSONObject.fromObject(result);
+		String code = fromObject.getJSONObject("result").getString("code");
+		if (StringUtils.equals(code, "000000")) {
+			System.out.println("aa");
+		}
+	}*/
 
 }
