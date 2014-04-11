@@ -110,13 +110,16 @@ public class Domob extends AbstractScoreWall {
 		builder.append("").append(","); //ma
 		builder.append(idfa).append(","); //ifa
 		builder.append("").append(","); //oid
-		builder.append("3f70a6bced98f727d7f492844bd15132").append(","); //key
+		builder.append("3f70a6bced98f727d7f492844bd15132"); //key
 		return Tools.md5(builder.toString());
 	}
 	
 	/*public static void main(String[] args) {
 		String string = Tools.md5("4498731,7C:AB:A3:D6:E7:81,,511F7987-6E2F-423A-BFED-E4C52CB5A6DC,,123456");
 		System.out.println(string);
+		
+		String sign = new Domob().getSign("492164095", "E8:8D:28:D6:4A:B6", "");
+		System.out.println(sign);
 	}*/
 
 }
