@@ -642,6 +642,8 @@
 				<mopan.notifyUrl>http://wall.imopan.com/app/ack.jsp</mopan.notifyUrl>
 				<wangyu.ip>122.225.96.147,122.225.96.135</wangyu.ip>
 				<wangyu.notifyUrl>http://c.yueyuweishi.com/adreturn.php</wangyu.notifyUrl>
+				<yijifen.ip>221.122.127.170-221.122.127.179</yijifen.ip>
+				<yijifen.notifyUrl>http://api.yijifen.com/EScore_API/common/comfirmActivateCheckGet.do</yijifen.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -673,6 +675,8 @@
 				<mopan.notifyUrl>http://wall.imopan.com/app/ack.jsp</mopan.notifyUrl>
 				<wangyu.ip>122.225.96.147,122.225.96.135</wangyu.ip>
 				<wangyu.notifyUrl>http://c.yueyuweishi.com/adreturn.php</wangyu.notifyUrl>
+				<yijifen.ip>221.122.127.170-221.122.127.179</yijifen.ip>
+				<yijifen.notifyUrl>http://api.yijifen.com/EScore_API/common/comfirmActivateCheckGet.do</yijifen.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -704,6 +708,8 @@
 				<mopan.notifyUrl>http://wall.imopan.com/app/ack.jsp</mopan.notifyUrl>
 				<wangyu.ip>122.225.96.147,122.225.96.135</wangyu.ip>
 				<wangyu.notifyUrl>http://c.yueyuweishi.com/adreturn.php</wangyu.notifyUrl>
+				<yijifen.ip>221.122.127.170-221.122.127.179</yijifen.ip>
+				<yijifen.notifyUrl>http://api.yijifen.com/EScore_API/common/comfirmActivateCheckGet.do</yijifen.notifyUrl>
 				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>
 			</properties>
 		</profile>

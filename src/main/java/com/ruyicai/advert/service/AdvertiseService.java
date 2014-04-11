@@ -11,11 +11,13 @@ import com.ruyicai.advert.consts.DomobErrorCode;
 import com.ruyicai.advert.consts.MopanErrorCode;
 import com.ruyicai.advert.consts.RuanlieErrorCode;
 import com.ruyicai.advert.consts.WangyuErrorCode;
+import com.ruyicai.advert.consts.YijifenErrorCode;
 import com.ruyicai.advert.controller.ResponseData;
 import com.ruyicai.advert.exception.DomobException;
 import com.ruyicai.advert.exception.MopanException;
 import com.ruyicai.advert.exception.RuanlieException;
 import com.ruyicai.advert.exception.WangyuException;
+import com.ruyicai.advert.exception.YijifenException;
 
 @Service
 public class AdvertiseService {
@@ -205,6 +207,32 @@ public class AdvertiseService {
 		param.put("ip", ip);
 		param.put("cid", cid);
 		param.put("deviceid", deviceid);
+		scoreWall.receiveAdvertise(param);
+	}
+	
+	/**
+	 * 易积分广告通知
+	 * @param ip
+	 * @param cid
+	 * @param deviceid
+	 */
+	public void yijifenReceive(String ip, String appId, String deviceid, String source, String idfa) {
+		logger.info("易积分广告点击记录 start mac="+deviceid+";source="+source+";idfa="+idfa+";ip="+ip);
+		//验证参数
+		if (StringUtils.isBlank(deviceid)&&StringUtils.isBlank(idfa)) {
+			throw new YijifenException(YijifenErrorCode.paramException);
+		}
+		ScoreWall scoreWall = advertManager.getScoreWall("yijifen");
+		if (scoreWall==null) {
+			logger.error("易积分广告点击记录未对接,mac="+deviceid+",idfa="+idfa+",ip="+ip);
+			throw new YijifenException(YijifenErrorCode.exception);
+		}
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("ip", ip);
+		param.put("appId", appId);
+		param.put("deviceid", deviceid);
+		param.put("source", source);
+		param.put("idfa", idfa);
 		scoreWall.receiveAdvertise(param);
 	}
 	

@@ -8,20 +8,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruyicai.advert.consts.DomobErrorCode;
 import com.ruyicai.advert.consts.MopanErrorCode;
 import com.ruyicai.advert.consts.RuanlieErrorCode;
 import com.ruyicai.advert.consts.WangyuErrorCode;
+import com.ruyicai.advert.consts.YijifenErrorCode;
 import com.ruyicai.advert.controller.resp.DomobResponseData;
 import com.ruyicai.advert.controller.resp.MopanResponseData;
 import com.ruyicai.advert.controller.resp.RuanlieResponseData;
 import com.ruyicai.advert.controller.resp.WangyuResponseData;
+import com.ruyicai.advert.controller.resp.YijifenResponseData;
 import com.ruyicai.advert.dto.RuanlieResultDto;
 import com.ruyicai.advert.exception.DomobException;
 import com.ruyicai.advert.exception.MopanException;
 import com.ruyicai.advert.exception.RuanlieException;
 import com.ruyicai.advert.exception.WangyuException;
+import com.ruyicai.advert.exception.YijifenException;
 import com.ruyicai.advert.service.AdvertiseService;
 
 /**
@@ -227,6 +229,36 @@ public class AdvertiseController {
 			logger.error("网域广告点击记录发生异常,mac="+deviceid, e);
 		}
 		WangyuResponseData rd = new WangyuResponseData(errorCode);
+		return rd;
+	}
+	
+	/**
+	 * 易积分广告
+	 * @param mac
+	 * @param appId
+	 * @param source
+	 * @return
+	 */
+	@RequestMapping(value = "/yijifenNotify", method = RequestMethod.GET)
+	public @ResponseBody 
+		YijifenResponseData yijifenNotify(HttpServletRequest request, @RequestParam("appid") String appId, 
+				@RequestParam("deviceid") String deviceid, @RequestParam("source") String source,
+				@RequestParam("idfa") String idfa) {
+		YijifenErrorCode errorCode = YijifenErrorCode.success;
+		try {
+			long startTimeMillis = System.currentTimeMillis();
+			String ip = request.getHeader("X-Forwarded-For");
+			advertiseService.yijifenReceive(ip, appId, deviceid, source, idfa);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("易积分广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+deviceid);
+		} catch (YijifenException e) {
+			errorCode = e.getErrorCode();
+			logger.error("易积分广告点击记录内部异常,message="+errorCode.memo+",mac="+deviceid);
+		} catch (Exception e) {
+			errorCode = YijifenErrorCode.exception;
+			logger.error("易积分广告点击记录发生异常,mac="+deviceid, e);
+		}
+		YijifenResponseData rd = new YijifenResponseData(errorCode);
 		return rd;
 	}
 	

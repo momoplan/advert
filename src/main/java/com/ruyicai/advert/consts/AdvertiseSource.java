@@ -10,7 +10,8 @@ public enum AdvertiseSource {
 	//miidi("miidi", "米迪", "1030");
 	ruanlie("ruanlie", "软猎", "1068"),
 	mopan("mopan", "磨盘", "1066"),
-	wangyu("wangyu", "网域", "1069");
+	wangyu("wangyu", "网域", "1069"),
+	yijifen("yijifen", "易积分", "1067");
 	
 	private String value;
 	

@@ -110,6 +110,19 @@ public class PropertiesUtil {
 		return wangyu_notifyUrl;
 	}
 	
+	//易积分
+	@Value("${yijifen.ip}")
+	private String yijifenIp;
+	public String getYijifenIp() {
+		return yijifenIp;
+	}
+	
+	@Value("${yijifen.notifyUrl}")
+	private String yijifen_notifyUrl;
+	public String getYijifen_notifyUrl() {
+		return yijifen_notifyUrl;
+	}
+	
 	@Value("${lotteryUrl}")
 	private String lotteryUrl;
 	public String getLotteryUrl() {
