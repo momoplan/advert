@@ -6,6 +6,8 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ruyicai.advert.consts.AdvertiseSource;
 import com.ruyicai.advert.consts.MopanErrorCode;
 import com.ruyicai.advert.domain.AdvertiseInfo;
@@ -14,6 +16,7 @@ import com.ruyicai.advert.util.HttpUtil;
 import com.ruyicai.advert.util.PropertiesUtil;
 import com.ruyicai.advert.util.StringUtil;
 
+@Component("mopan")
 public class Mopan extends AbstractScoreWall {
 
 	private Logger logger = Logger.getLogger(Mopan.class);
