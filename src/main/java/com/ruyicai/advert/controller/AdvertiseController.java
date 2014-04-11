@@ -179,20 +179,20 @@ public class AdvertiseController {
 	@RequestMapping(value = "/mopanNotify", method = RequestMethod.GET)
 	public @ResponseBody 
 		MopanResponseData mopanNotify(HttpServletRequest request, @RequestParam("appid") String appId, 
-				@RequestParam("mac") String mac,  @RequestParam("idfa") String idfa) {
+				@RequestParam("mac") String mac) {
 		MopanErrorCode errorCode = MopanErrorCode.success;
 		try {
 			long startTimeMillis = System.currentTimeMillis();
 			String ip = request.getHeader("X-Forwarded-For");
-			advertiseService.mopanReceive(ip, appId, mac, idfa);
+			advertiseService.mopanReceive(ip, appId, mac);
 			long endTimeMillis = System.currentTimeMillis();
-			logger.info("磨盘广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac+",idfa="+idfa);
+			logger.info("磨盘广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac);
 		} catch (MopanException e) {
 			errorCode = e.getErrorCode();
-			logger.error("磨盘广告点击记录内部异常,message="+errorCode.memo+",mac="+mac+",idfa="+idfa);
+			logger.error("磨盘广告点击记录内部异常,message="+errorCode.memo+",mac="+mac);
 		} catch (Exception e) {
 			errorCode = MopanErrorCode.exception;
-			logger.error("磨盘广告点击记录发生异常,mac="+mac+",idfa="+idfa, e);
+			logger.error("磨盘广告点击记录发生异常,mac="+mac, e);
 		}
 		MopanResponseData rd = new MopanResponseData(errorCode);
 		return rd;

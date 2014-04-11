@@ -164,21 +164,20 @@ public class AdvertiseService {
 	 * @param mac
 	 * @param idfa
 	 */
-	public void mopanReceive(String ip, String appId, String mac, String idfa) {
-		logger.info("磨盘广告点击记录 start mac="+mac+";idfa="+idfa+";appId="+appId+";ip="+ip);
+	public void mopanReceive(String ip, String appId, String mac) {
+		logger.info("磨盘广告点击记录 start mac="+mac+";appId="+appId+";ip="+ip);
 		//验证参数
-		if (StringUtils.isBlank(mac)&&StringUtils.isBlank(idfa)) {
+		if (StringUtils.isBlank(mac)) {
 			throw new MopanException(MopanErrorCode.paramException);
 		}
 		ScoreWall scoreWall = advertManager.getScoreWall("mopan");
 		if (scoreWall==null) {
-			logger.error("磨盘广告点击记录未对接,mac="+mac+",idfa="+idfa+",appId="+appId+",ip="+ip);
+			logger.error("磨盘广告点击记录未对接,mac="+mac+",appId="+appId+",ip="+ip);
 			throw new MopanException(MopanErrorCode.exception);
 		}
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("ip", ip);
 		param.put("mac", mac);
-		param.put("idfa", idfa);
 		param.put("appId", appId);
 		scoreWall.receiveAdvertise(param);
 	}
