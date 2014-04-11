@@ -72,6 +72,18 @@ public class PropertiesUtil {
 		return ruanlie_notifyUrl;
 	}
 	
+	@Value("${mopan.ip}")
+	private String mopanIp;
+	public String getMopanIp() {
+		return mopanIp;
+	}
+	
+	@Value("${mopan.notifyUrl}")
+	private String mopan_notifyUrl;
+	public String getMopan_notifyUrl() {
+		return mopan_notifyUrl;
+	}
+	
 	@Value("${lotteryUrl}")
 	private String lotteryUrl;
 	public String getLotteryUrl() {

@@ -637,6 +637,8 @@
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>115.29.229.242</ruanlie.ip>
 				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
+				<mopan.ip>115.238.154.147</mopan.ip>
+				<mopan.notifyUrl>http://wall.imopan.com/app/ack.jsp</mopan.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -663,6 +665,8 @@
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>115.29.229.242</ruanlie.ip>
 				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
+				<mopan.ip>115.238.154.147</mopan.ip>
+				<mopan.notifyUrl>http://wall.imopan.com/app/ack.jsp</mopan.notifyUrl>
 				<lotteryUrl>http://192.168.0.42:8080/lottery/</lotteryUrl>
 			</properties>
 		</profile>
@@ -689,6 +693,8 @@
 				<miidi.notifyUrl>http://api.miidi.net/cas/advAck.bin</miidi.notifyUrl>
 				<ruanlie.ip>115.29.229.242</ruanlie.ip>
 				<ruanlie.notifyUrl>http://ad2.ruixinonline.com/ad_rest/rest/appInstall/install</ruanlie.notifyUrl>
+				<mopan.ip>115.238.154.147</mopan.ip>
+				<mopan.notifyUrl>http://wall.imopan.com/app/ack.jsp</mopan.notifyUrl>
 				<lotteryUrl>http://192.168.99.6/lottery/</lotteryUrl>
 			</properties>
 		</profile>

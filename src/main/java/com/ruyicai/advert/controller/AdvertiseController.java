@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ruyicai.advert.consts.DomobErrorCode;
+import com.ruyicai.advert.consts.MopanErrorCode;
 import com.ruyicai.advert.consts.RuanlieErrorCode;
 import com.ruyicai.advert.controller.resp.DomobResponseData;
+import com.ruyicai.advert.controller.resp.MopanResponseData;
 import com.ruyicai.advert.controller.resp.RuanlieResponseData;
 import com.ruyicai.advert.dto.RuanlieResultDto;
 import com.ruyicai.advert.exception.DomobException;
+import com.ruyicai.advert.exception.MopanException;
 import com.ruyicai.advert.exception.RuanlieException;
 import com.ruyicai.advert.service.AdvertiseService;
 
@@ -163,6 +166,35 @@ public class AdvertiseController {
 		}
 		RuanlieResultDto dto = new RuanlieResultDto(errorCode);
 		rd.setResult(dto);
+		return rd;
+	}
+	
+	/**
+	 * 磨盘广告
+	 * @param mac
+	 * @param appId
+	 * @param source
+	 * @return
+	 */
+	@RequestMapping(value = "/mopanNotify", method = RequestMethod.GET)
+	public @ResponseBody 
+		MopanResponseData mopanNotify(HttpServletRequest request, @RequestParam("appid") String appId, 
+				@RequestParam("mac") String mac,  @RequestParam("idfa") String idfa) {
+		MopanErrorCode errorCode = MopanErrorCode.success;
+		try {
+			long startTimeMillis = System.currentTimeMillis();
+			String ip = request.getHeader("X-Forwarded-For");
+			advertiseService.mopanReceive(ip, appId, mac, idfa);
+			long endTimeMillis = System.currentTimeMillis();
+			logger.info("磨盘广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+mac+",idfa="+idfa);
+		} catch (MopanException e) {
+			errorCode = e.getErrorCode();
+			logger.error("磨盘广告点击记录内部异常,message="+errorCode.memo+",mac="+mac+",idfa="+idfa);
+		} catch (Exception e) {
+			errorCode = MopanErrorCode.exception;
+			logger.error("磨盘广告点击记录发生异常,mac="+mac+",idfa="+idfa, e);
+		}
+		MopanResponseData rd = new MopanResponseData(errorCode);
 		return rd;
 	}
 	
