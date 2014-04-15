@@ -250,13 +250,13 @@ public class AdvertiseController {
 			String ip = request.getHeader("X-Forwarded-For");
 			advertiseService.yijifenReceive(ip, appId, deviceid, source, idfa);
 			long endTimeMillis = System.currentTimeMillis();
-			logger.info("易积分广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+deviceid);
+			logger.info("易积分广告点击记录用时:"+(endTimeMillis-startTimeMillis)+",mac="+deviceid+",idfa="+idfa);
 		} catch (YijifenException e) {
 			errorCode = e.getErrorCode();
-			logger.error("易积分广告点击记录内部异常,message="+errorCode.memo+",mac="+deviceid);
+			logger.error("易积分广告点击记录内部异常,message="+errorCode.memo+",mac="+deviceid+",idfa="+idfa);
 		} catch (Exception e) {
 			errorCode = YijifenErrorCode.exception;
-			logger.error("易积分广告点击记录发生异常,mac="+deviceid, e);
+			logger.error("易积分广告点击记录发生异常,mac="+deviceid+",idfa="+idfa, e);
 		}
 		YijifenResponseData rd = new YijifenResponseData(errorCode);
 		return rd;
