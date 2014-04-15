@@ -243,7 +243,7 @@ public class AdvertiseController {
 	public @ResponseBody 
 		YijifenResponseData yijifenNotify(HttpServletRequest request, @RequestParam("appid") String appId, 
 				@RequestParam("deviceid") String deviceid, @RequestParam("source") String source,
-				@RequestParam("IDFV") String idfa) {
+				@RequestParam("idfa") String idfa) {
 		YijifenErrorCode errorCode = YijifenErrorCode.success;
 		try {
 			long startTimeMillis = System.currentTimeMillis();
