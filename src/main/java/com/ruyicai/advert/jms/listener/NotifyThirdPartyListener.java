@@ -49,8 +49,11 @@ public class NotifyThirdPartyListener {
 				advertiseUtil.notifyThirdParty(advertiseInfo);
 			} else { //由于客户端的原因,没有激活记录就注册的,也要通知第三方
 				AdvertiseInfo advertiseInfo = advertiseUtil.getValidAdvertiseInfo(mac);
-				if (advertiseInfo!=null&&
-						StringUtils.equals(advertiseInfo.getSource(), AdvertiseSource.ruanlie.value())) { //按激活算的
+				if (advertiseInfo==null) {
+					return;
+				}
+				String source = advertiseInfo.getSource();
+				if (StringUtils.equals(source, AdvertiseSource.ruanlie.value())) { //按激活算的
 					return;
 				}
 				advertiseUtil.notifyThirdParty(advertiseInfo); //通知第三方
