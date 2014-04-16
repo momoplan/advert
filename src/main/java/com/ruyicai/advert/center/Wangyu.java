@@ -62,8 +62,8 @@ public class Wangyu extends AbstractScoreWall {
 		String result = "";
 		int requestCount = 1;
 		while (StringUtil.isEmpty(result) && requestCount<4) {
-			String url = propertiesUtil.getWangyu_notifyUrl()+"?ver=2"+"&appid="+appId+"&idtype=1"+
-					"&deviceid="+adMac+"&cp=4"+"&outformat=2";
+			String url = propertiesUtil.getWangyu_notifyUrl()+"?ver=2"+"&appid="+appId+
+					"&deviceid="+adMac+"&outformat=2&check=d8d85766406036e975fa1b1383ede2eb";
 			result = HttpUtil.sendRequestByGet(url, true);
 			logger.info("广告通知网域返回:"+result+";adMac="+adMac+";requestCount="+requestCount);
 			if (!StringUtil.isEmpty(result)) {
