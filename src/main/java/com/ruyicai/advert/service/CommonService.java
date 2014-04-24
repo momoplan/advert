@@ -33,7 +33,7 @@ public class CommonService {
 			int line = 0;
 			while ((tempString = reader.readLine()) != null) {
 				line++;
-				System.out.println("line:"+line);
+				System.out.println("line:"+line+",mac="+tempString);
 				if (StringUtils.isBlank(tempString)) {
 					continue;
 				}
