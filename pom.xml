@@ -625,7 +625,7 @@
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
 				<jms.brokerURL>tcp://192.168.0.42:61616</jms.brokerURL>
-				<limei.ip>59.151.106.1-59.151.106.14,59.151.106.193-59.151.106.222,59.151.106.145-59.151.106.158</limei.ip>
+				<limei.ip>59.151.106.1-59.151.106.14,59.151.106.193-59.151.106.222,59.151.106.145-59.151.106.158,58.83.154.1-58.83.154.254,211.151.7.193-211.151.7.254</limei.ip>
 				<!-- <limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl> -->
 				<limei.notifyUrl>http://api2.immob.cn/capCallbackApi/1/</limei.notifyUrl>
 				<limei.android.aduid>9c697272e78036382b35056bdf53904b</limei.android.aduid>
@@ -658,7 +658,7 @@
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
 				<jms.brokerURL>tcp://192.168.0.42:61616</jms.brokerURL>
-				<limei.ip>59.151.106.1-59.151.106.14,59.151.106.193-59.151.106.222,59.151.106.145-59.151.106.158</limei.ip>
+				<limei.ip>59.151.106.1-59.151.106.14,59.151.106.193-59.151.106.222,59.151.106.145-59.151.106.158,58.83.154.1-58.83.154.254,211.151.7.193-211.151.7.254</limei.ip>
 				<!-- <limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl> -->
 				<limei.notifyUrl>http://api2.immob.cn/capCallbackApi/1/</limei.notifyUrl>
 				<limei.android.aduid>9c697272e78036382b35056bdf53904b</limei.android.aduid>
@@ -691,7 +691,7 @@
 				<database.username>jrtConsole</database.username>
 				<database.password>jrtConsole</database.password>
 				<jms.brokerURL>failover://(tcp://192.168.99.16:61616,tcp://192.168.99.17:61616)?randomize=false</jms.brokerURL>
-				<limei.ip>59.151.106.1-59.151.106.14,59.151.106.193-59.151.106.222,59.151.106.145-59.151.106.158</limei.ip>
+				<limei.ip>59.151.106.1-59.151.106.14,59.151.106.193-59.151.106.222,59.151.106.145-59.151.106.158,58.83.154.1-58.83.154.254,211.151.7.193-211.151.7.254</limei.ip>
 				<!-- <limei.notifyUrl>http://api.lmmob.com/capCallbackApi/1/</limei.notifyUrl> -->
 				<limei.notifyUrl>http://api2.immob.cn/capCallbackApi/1/</limei.notifyUrl>
 				<limei.android.aduid>9c697272e78036382b35056bdf53904b</limei.android.aduid>
