@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.ruyicai.advert.domain.TempInfo;
 import com.ruyicai.advert.domain.TregisterInfo;
 import com.ruyicai.advert.domain.UserInf;
+import com.ruyicai.advert.service.back.LotteryService;
 
 @Service
 public class CommonService {
@@ -140,6 +141,24 @@ public class CommonService {
 			return fromObject.getJSONObject("value");
 		}
 		return null;
+	}
+	
+	/**
+	 * 赠送彩金
+	 * @param userNo
+	 * @param point
+	 * @return
+	 */
+	public String presentDividend(String userNo, String point, String channel, String memo) {
+		String result = lotteryService.presentDividend(userNo, point, channel, memo);
+		if (StringUtils.isBlank(result)) {
+			return "";
+		}
+		JSONObject fromObject = JSONObject.fromObject(result);
+		if (fromObject==null) {
+			return "";
+		}
+		return fromObject.getString("errorCode");
 	}
 
 }

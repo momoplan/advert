@@ -14,7 +14,7 @@ import com.ruyicai.advert.consts.Constants;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.domain.ScoreBind;
 import com.ruyicai.advert.domain.ScoreInfo;
-import com.ruyicai.advert.service.LotteryService;
+import com.ruyicai.advert.service.back.LotteryService;
 import com.ruyicai.advert.util.HttpUtil;
 import com.ruyicai.advert.util.PropertiesUtil;
 import com.ruyicai.advert.util.StringUtil;

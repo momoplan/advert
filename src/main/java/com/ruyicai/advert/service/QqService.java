@@ -1,12 +1,10 @@
 package com.ruyicai.advert.service;
 
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ruyicai.advert.consts.errorcode.QqErrorCode;
 import com.ruyicai.advert.domain.QqUserInfo;
 import com.ruyicai.advert.exception.QqException;
@@ -49,31 +47,42 @@ public class QqService {
 			throw new QqException(QqErrorCode.userNotEsist);
 		}
 		String userno = qqUserInfo.getUserno(); //用户编号
-		if (StringUtils.equals("cmd", "Check_award")) { //查询用户是否完成步骤,若完成,则给用户发放步骤礼包
+		JSONObject userinfoObject = commonService.getUserinfoByUserno(userno);
+		if (userinfoObject==null) {
+			throw new QqException(QqErrorCode.userNotEsist);
+		}
+		String channel = userinfoObject.getString("channel"); //用户渠道号
+		if (StringUtils.equals("cmd", "Check")) { //查询用户是否完成该任务步骤(系统自动扫描时触发)
+			checkTaskFinish(userinfoObject);
+		} else if (StringUtils.equals("cmd", "Check_award")) { //查询用户是否完成步骤,若完成,则给用户发放步骤礼包
 			if (StringUtils.equals(step, "3")) { //步骤3
-				JSONObject userinfoObject = commonService.getUserinfoByUserno(userno);
-				if (userinfoObject==null) {
-					throw new QqException(QqErrorCode.userNotEsist);
-				}
-				//注册时间
-				String regTime = userinfoObject.getString("regtime");
-				regTime = DateParseFormatUtil.formatDate(regTime, "yyyy-MM-dd");
-				//当前日期
-				String today = DateParseFormatUtil.getPreDayDate(0, "yyyy-MM-dd");
-				if (!StringUtils.equals(regTime, today)) {
-					throw new QqException(QqErrorCode.notFinish);
-				}
-				String mobileId = userinfoObject.getString("mobileid"); //绑定的手机号码
-				String userName = userinfoObject.getString("userName"); //用户名
-				String certId = userinfoObject.getString("certid"); //身份证
-				String name = userinfoObject.getString("name"); //真实姓名
-				if (StringUtil.isBlank(mobileId)||StringUtil.isBlank(userName)
-						||StringUtil.isBlank(certId)||StringUtil.isBlank(name)) {
-					throw new QqException(QqErrorCode.notFinish);
-				}
+				checkTaskFinish(userinfoObject);
 				//todo:赠送彩金
-				
+				commonService.presentDividend(userno, "300", channel, "应用宝任务奖励");
 			}
+		}
+	}
+	
+	/**
+	 * 检查任务是否完成
+	 * @param userno
+	 */
+	private void checkTaskFinish(JSONObject userinfoObject) {
+		//注册时间
+		String regTime = userinfoObject.getString("regtime");
+		regTime = DateParseFormatUtil.formatDate(regTime, "yyyy-MM-dd");
+		//当前日期
+		String today = DateParseFormatUtil.getPreDayDate(0, "yyyy-MM-dd");
+		if (!StringUtils.equals(regTime, today)) {
+			throw new QqException(QqErrorCode.notFinish);
+		}
+		String mobileId = userinfoObject.getString("mobileid"); //绑定的手机号码
+		String userName = userinfoObject.getString("userName"); //用户名
+		String certId = userinfoObject.getString("certid"); //身份证
+		String name = userinfoObject.getString("name"); //真实姓名
+		if (StringUtil.isBlank(mobileId)||StringUtil.isBlank(userName)
+				||StringUtil.isBlank(certId)||StringUtil.isBlank(name)) {
+			throw new QqException(QqErrorCode.notFinish);
 		}
 	}
 	
