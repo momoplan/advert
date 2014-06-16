@@ -1,6 +1,6 @@
 package com.ruyicai.advert.exception;
 
-import com.ruyicai.advert.consts.MopanErrorCode;
+import com.ruyicai.advert.consts.errorcode.MopanErrorCode;
 
 public class MopanException extends RuntimeException {
 

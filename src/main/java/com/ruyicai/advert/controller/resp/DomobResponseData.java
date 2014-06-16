@@ -3,7 +3,7 @@ package com.ruyicai.advert.controller.resp;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.json.RooJson;
 
-import com.ruyicai.advert.consts.DomobErrorCode;
+import com.ruyicai.advert.consts.errorcode.DomobErrorCode;
 
 @RooJson
 @RooJavaBean

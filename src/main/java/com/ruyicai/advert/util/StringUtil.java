@@ -31,6 +31,18 @@ public class StringUtil {
 	}
 	
 	/**
+	 * 判断是否为空
+	 * @param value
+	 * @return
+	 */
+	public static boolean isBlank(String value) {
+		if (StringUtils.isBlank(value)||StringUtils.equals(value, "null")) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * 去掉字符串结尾的字符
 	 * @param string
 	 * @param endCharacter

@@ -7,7 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.ruyicai.advert.consts.YijifenErrorCode;
+
+import com.ruyicai.advert.consts.errorcode.YijifenErrorCode;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.exception.YijifenException;
 import com.ruyicai.advert.util.HttpUtil;

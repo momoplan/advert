@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruyicai.advert.consts.AdvertiseSource;
-import com.ruyicai.advert.consts.MopanErrorCode;
+import com.ruyicai.advert.consts.errorcode.MopanErrorCode;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.exception.MopanException;
 import com.ruyicai.advert.util.HttpUtil;

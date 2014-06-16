@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ruyicai.advert.consts.AdvertiseSource;
-import com.ruyicai.advert.consts.RuanlieErrorCode;
+import com.ruyicai.advert.consts.errorcode.RuanlieErrorCode;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.exception.RuanlieException;
 import com.ruyicai.advert.util.HttpUtil;

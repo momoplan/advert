@@ -1,6 +1,6 @@
-package com.ruyicai.advert.consts;
+package com.ruyicai.advert.consts.errorcode;
 
-public enum YijifenErrorCode {
+public enum WangyuErrorCode {
 
 	success(true, "成功"), //成功
 	paramException(false, "参数有误"), //参数异常
@@ -12,7 +12,7 @@ public enum YijifenErrorCode {
 	
 	public String memo;
 	
-	YijifenErrorCode(boolean value, String memo) {
+	WangyuErrorCode(boolean value, String memo) {
 		this.value = value;
 		this.memo = memo;
 	}

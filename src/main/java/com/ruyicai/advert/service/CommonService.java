@@ -7,8 +7,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruyicai.advert.domain.TempInfo;
 import com.ruyicai.advert.domain.TregisterInfo;
@@ -18,6 +22,9 @@ import com.ruyicai.advert.domain.UserInf;
 public class CommonService {
 
 	private Logger logger = Logger.getLogger(CommonService.class);
+	
+	@Autowired
+	private LotteryService lotteryService;
 	
 	/**
 	 * 统计激活和注册数
@@ -112,6 +119,27 @@ public class CommonService {
 		} catch (Exception e) {
 			logger.error("统计注册发生异常,mac="+mac, e);
 		}
+	}
+	
+	/**
+	 * 根据用户编号获得用户信息
+	 * @param userno
+	 * @return
+	 */
+	public JSONObject getUserinfoByUserno(String userno) {
+		String result = lotteryService.getUserByUserNo(userno);
+		if (StringUtils.isBlank(result)) {
+			return null;
+		}
+		JSONObject fromObject = JSONObject.fromObject(result);
+		if (fromObject==null) {
+			return null;
+		}
+		String errorCode = fromObject.getString("errorCode");
+		if (StringUtils.equals(errorCode, "0")) {
+			return fromObject.getJSONObject("value");
+		}
+		return null;
 	}
 
 }

@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruyicai.advert.consts.DomobErrorCode;
-import com.ruyicai.advert.consts.MopanErrorCode;
-import com.ruyicai.advert.consts.RuanlieErrorCode;
-import com.ruyicai.advert.consts.WangyuErrorCode;
-import com.ruyicai.advert.consts.YijifenErrorCode;
+
+import com.ruyicai.advert.consts.errorcode.DomobErrorCode;
+import com.ruyicai.advert.consts.errorcode.MopanErrorCode;
+import com.ruyicai.advert.consts.errorcode.RuanlieErrorCode;
+import com.ruyicai.advert.consts.errorcode.WangyuErrorCode;
+import com.ruyicai.advert.consts.errorcode.YijifenErrorCode;
 import com.ruyicai.advert.controller.resp.DomobResponseData;
 import com.ruyicai.advert.controller.resp.MopanResponseData;
 import com.ruyicai.advert.controller.resp.RuanlieResponseData;

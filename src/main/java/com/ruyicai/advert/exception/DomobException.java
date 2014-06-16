@@ -1,6 +1,6 @@
 package com.ruyicai.advert.exception;
 
-import com.ruyicai.advert.consts.DomobErrorCode;
+import com.ruyicai.advert.consts.errorcode.DomobErrorCode;
 
 public class DomobException extends RuntimeException {
 

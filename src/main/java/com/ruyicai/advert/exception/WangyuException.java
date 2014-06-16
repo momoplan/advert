@@ -1,6 +1,6 @@
 package com.ruyicai.advert.exception;
 
-import com.ruyicai.advert.consts.WangyuErrorCode;
+import com.ruyicai.advert.consts.errorcode.WangyuErrorCode;
 
 public class WangyuException extends RuntimeException {
 

@@ -1,6 +1,6 @@
 package com.ruyicai.advert.exception;
 
-import com.ruyicai.advert.consts.RuanlieErrorCode;
+import com.ruyicai.advert.consts.errorcode.RuanlieErrorCode;
 
 public class RuanlieException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.ruyicai.advert.consts;
+package com.ruyicai.advert.consts.errorcode;
 
 public enum RuanlieErrorCode {
 

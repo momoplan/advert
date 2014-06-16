@@ -1,6 +1,6 @@
-package com.ruyicai.advert.consts;
+package com.ruyicai.advert.consts.errorcode;
 
-public enum MopanErrorCode {
+public enum DomobErrorCode {
 
 	success(true, "ok"), //成功
 	paramException(false, "paramException"), //参数异常
@@ -12,7 +12,7 @@ public enum MopanErrorCode {
 	
 	public String memo;
 	
-	MopanErrorCode(boolean value, String memo) {
+	DomobErrorCode(boolean value, String memo) {
 		this.value = value;
 		this.memo = memo;
 	}

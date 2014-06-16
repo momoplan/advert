@@ -1,6 +1,6 @@
 package com.ruyicai.advert.exception;
 
-import com.ruyicai.advert.consts.QqErrorCode;
+import com.ruyicai.advert.consts.errorcode.QqErrorCode;
 
 public class QqException extends RuntimeException {
 

@@ -6,7 +6,8 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.ruyicai.advert.consts.WangyuErrorCode;
+
+import com.ruyicai.advert.consts.errorcode.WangyuErrorCode;
 import com.ruyicai.advert.domain.AdvertiseInfo;
 import com.ruyicai.advert.exception.WangyuException;
 import com.ruyicai.advert.util.HttpUtil;

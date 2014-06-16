@@ -2,7 +2,8 @@ package com.ruyicai.advert.dto;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.json.RooJson;
-import com.ruyicai.advert.consts.RuanlieErrorCode;
+
+import com.ruyicai.advert.consts.errorcode.RuanlieErrorCode;
 
 @RooJson
 @RooJavaBean

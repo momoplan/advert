@@ -1,6 +1,6 @@
 package com.ruyicai.advert.exception;
 
-import com.ruyicai.advert.consts.YijifenErrorCode;
+import com.ruyicai.advert.consts.errorcode.YijifenErrorCode;
 
 public class YijifenException extends RuntimeException {
 
