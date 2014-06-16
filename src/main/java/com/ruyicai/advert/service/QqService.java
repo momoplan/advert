@@ -53,12 +53,17 @@ public class QqService {
 		}
 		String channel = userinfoObject.getString("channel"); //用户渠道号
 		if (StringUtils.equals("cmd", "Check")) { //查询用户是否完成该任务步骤(系统自动扫描时触发)
-			checkTaskFinish(userinfoObject);
+			if (StringUtils.equals(step, "3")) { //步骤3
+				checkTaskFinish(userinfoObject);
+			}
 		} else if (StringUtils.equals("cmd", "Check_award")) { //查询用户是否完成步骤,若完成,则给用户发放步骤礼包
 			if (StringUtils.equals(step, "3")) { //步骤3
 				checkTaskFinish(userinfoObject);
 				//todo:赠送彩金
-				commonService.presentDividend(userno, "300", channel, "应用宝任务奖励");
+				String presentResult = commonService.presentDividend(userno, "300", channel, "应用宝任务奖励");
+				if (!StringUtils.equals(presentResult, "0")) {
+					throw new QqException(QqErrorCode.awardGiveFail);
+				}
 			}
 		}
 	}
