@@ -39,12 +39,12 @@ public class QqController {
 	 */
 	@RequestMapping(value = "/taskMarket")
 	public @ResponseBody 
-	QqResponseData taskMarket(HttpServletRequest request, @RequestParam("cmd") String cmd, 
-			@RequestParam("openid") String openid, @RequestParam("appid") String appid, 
-			@RequestParam("ts") String ts, @RequestParam("version") String version,
-			@RequestParam("contractid") String contractid, @RequestParam("step") String step,
-			@RequestParam("payitem") String payitem, @RequestParam("billno") String billno,
-			@RequestParam("pkey") String pkey, @RequestParam("sig") String sig) {
+	QqResponseData taskMarket(HttpServletRequest request, @RequestParam(value="cmd", required=false) String cmd,
+			@RequestParam(value="openid", required=false) String openid, @RequestParam(value="appid", required=false) String appid,
+			@RequestParam(value="ts", required=false) String ts, @RequestParam(value="version", required=false) String version,
+			@RequestParam(value="contractid", required=false) String contractid, @RequestParam(value="step", required=false) String step,
+			@RequestParam(value="payitem", required=false) String payitem, @RequestParam(value="billno", required=false) String billno,
+			@RequestParam(value="pkey", required=false) String pkey, @RequestParam(value="sig", required=false) String sig) {
 		QqErrorCode result = QqErrorCode.success;
 		try {
 			long startTimeMillis = System.currentTimeMillis();
