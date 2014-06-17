@@ -7,11 +7,11 @@ import java.lang.String;
 
 privileged aspect QqResponseData_Roo_JavaBean {
     
-    public String QqResponseData.getRet() {
+    public int QqResponseData.getRet() {
         return this.ret;
     }
     
-    public void QqResponseData.setRet(String ret) {
+    public void QqResponseData.setRet(int ret) {
         this.ret = ret;
     }
     

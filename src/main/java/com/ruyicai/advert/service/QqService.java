@@ -46,6 +46,12 @@ public class QqService {
 		logger.info("应用宝任务集市,cmd:"+cmd+",openid:"+openid+",appid:"+appid+",ts:"+ts+
 				",version:"+version+",contractid:"+contractid+",step:"+step+",payitem:"+payitem+
 				",billno:"+billno+",pkey:"+pkey+",sig:"+sig+",ip:"+ip);
+		if (StringUtils.isBlank(cmd)||StringUtils.isBlank(openid)||StringUtils.isBlank(appid)
+				||StringUtils.isBlank(ts)||StringUtils.isBlank(version)||StringUtils.isBlank(contractid)
+				||StringUtils.isBlank(step)||StringUtils.isBlank(payitem)||StringUtils.isBlank(billno)
+				||StringUtils.isBlank(pkey)||StringUtils.isBlank(sig)) {
+			return;
+		}
 		if (StringUtils.isBlank(cmd)||StringUtils.isBlank(openid)) {
 			throw new QqException(QqErrorCode.paramError);
 		}
