@@ -8,7 +8,9 @@ public enum QqErrorCode {
 	awardHasGive("3", "该步骤奖励已发放过"),
 	awardGiveFail("102", "奖励发放失败"),
 	paramError("103", "请求参数错误"),
-	exception("500", "服务器异常");
+	exception("500", "服务器异常"),
+	pkeyError("1001", "pkey验证失败"),
+	sigError("1002", "sig验证失败");
 	
 	public String value;
 	

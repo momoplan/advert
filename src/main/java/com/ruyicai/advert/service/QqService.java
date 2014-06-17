@@ -1,7 +1,10 @@
 package com.ruyicai.advert.service;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -46,6 +49,9 @@ public class QqService {
 		if (StringUtils.isBlank(cmd)||StringUtils.isBlank(openid)) {
 			throw new QqException(QqErrorCode.paramError);
 		}
+		//验证签名
+		verifySign(cmd, openid, appid, ts, version, contractid, step, payitem, billno, pkey, sig);
+		//查询userno
 		QqUserInfo qqUserInfo = QqUserInfo.findByMid(openid);
 		if (qqUserInfo==null||StringUtils.isBlank(qqUserInfo.getUserno())) {
 			throw new QqException(QqErrorCode.userNotEsist);
@@ -91,31 +97,49 @@ public class QqService {
 			throw new QqException(QqErrorCode.paramError);
 		}
 	}
-
-	private void taskAward(String award, String openid, String appid, String ts, String version, String contractid, 
-			String step, String payitem, String billno, String pkey, String sig, String userno, String channel) {
-		//查询奖励是否已发放过
-		TaskMarket taskMarket1 = TaskMarket.findByOpenidContractid(openid, contractid);
-		if (taskMarket1!=null) {
-			throw new QqException(QqErrorCode.awardHasGive);
-		}
-		//保存记录
-		TaskMarket taskMarket2 = saveTaskMarket(userno, openid, appid, ts, version, contractid, step, 
-				payitem, billno, pkey, sig);
-		//赠送彩金
-		if (StringUtils.isBlank(award)) {
-			throw new QqException(QqErrorCode.paramError);
-		}
-		String presentResult = commonService.presentDividend(userno, award, channel, "应用宝任务奖励");
-		if (!StringUtils.equals(presentResult, "0")) {
-			throw new QqException(QqErrorCode.awardGiveFail);
-		}
-		taskMarket2.setAmt(new BigDecimal(award));
-		taskMarket2.setUpdatetime(new Date());
-		taskMarket2.setState(1);
-		taskMarket2.merge();
-	}
 	
+	@SuppressWarnings("unchecked")
+	private void verifySign(String cmd, String openid, String appid, String ts, String version, 
+			String contractid, String step, String payitem, String billno, String pkey, String sig) {
+		try {
+			String appkey = "ee7e8cdedcd8aab1faaf3300c20f8cff";
+			//验证pkey
+			StringBuilder pbuilder = new StringBuilder();
+			pbuilder.append(openid).append(appkey).append(ts);
+			if (!StringUtils.equals(Tools.md5(pbuilder.toString()), pkey)) {
+				throw new QqException(QqErrorCode.pkeyError);
+			}
+			//验证sig
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("cmd", cmd);
+			map.put("openid", openid);
+			map.put("appid", appid);
+			map.put("ts", ts);
+			map.put("version", version);
+			map.put("contractid", contractid);
+			map.put("step", step);
+			map.put("payitem", payitem);
+			map.put("billno", billno);
+			map.put("pkey", pkey);
+			map = Tools.sortMapByKey(map, false);
+			StringBuilder sbuilder = new StringBuilder();
+			for(Map.Entry<String, String> entry: map.entrySet()) {
+				sbuilder.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), "UTF-8")).append("&");
+			}
+			String httpMethod = "GET";
+			String uri = "/advert/qq/taskMarket";
+			String param = StringUtils.stripEnd(sbuilder.toString(), "&");
+			String str = httpMethod+"&"+URLEncoder.encode(uri, "UTF-8")+"&"+URLEncoder.encode(param, "UTF-8");
+			String hmac = Tools.hmac(str, appkey+"&");
+			if (!StringUtils.equals(hmac, sig)) {
+				throw new QqException(QqErrorCode.sigError);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new QqException(QqErrorCode.exception);
+		}
+	}
+
 	private void checkTaskStep2(JSONObject userinfoObject) {
 		/*//注册时间
 		String regTime = userinfoObject.getString("regtime");
@@ -169,12 +193,54 @@ public class QqService {
 		return taskMarket;
 	}
 	
-	public static void main(String[] args) {
-		/*String str = "aaaccc1399541144";
-		System.out.println(Tools.md5(str));*/
-		
-		String str = "GET&%2Fv3%2Fuser%2Fget_info&appid%3D123456%26format%3Djson%26openid%3D11111111111111111%26openkey%3D2222222222222222%26pf%3Dqzone%26userip%3D112.90.139.30";
-		System.out.println(Tools.hmac(str, "228bf094169a40a3bd188ba37ebe8723&"));
+	private void taskAward(String award, String openid, String appid, String ts, String version, String contractid, 
+			String step, String payitem, String billno, String pkey, String sig, String userno, String channel) {
+		//查询奖励是否已发放过
+		TaskMarket taskMarket1 = TaskMarket.findByOpenidContractid(openid, contractid);
+		if (taskMarket1!=null) {
+			throw new QqException(QqErrorCode.awardHasGive);
+		}
+		//保存记录
+		TaskMarket taskMarket2 = saveTaskMarket(userno, openid, appid, ts, version, contractid, step, 
+				payitem, billno, pkey, sig);
+		//赠送彩金
+		if (StringUtils.isBlank(award)) {
+			throw new QqException(QqErrorCode.paramError);
+		}
+		String presentResult = commonService.presentDividend(userno, award, channel, "应用宝任务奖励");
+		if (!StringUtils.equals(presentResult, "0")) {
+			throw new QqException(QqErrorCode.awardGiveFail);
+		}
+		taskMarket2.setAmt(new BigDecimal(award));
+		taskMarket2.setUpdatetime(new Date());
+		taskMarket2.setState(1);
+		taskMarket2.merge();
 	}
+	
+	/*@SuppressWarnings("unchecked")
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		StringBuilder builder = new StringBuilder();
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("cmd", "award");
+		map.put("openid", "05ad35af3ae00b0043818973acd32207ae5b046a");
+		map.put("appid", "100737758");
+		map.put("ts", "1402986653");
+		map.put("version", "V3M");
+		map.put("contractid", "100737758T3M20140617121145");
+		map.put("step", "1");
+		map.put("payitem", "123");
+		map.put("billno", "3e5078421962d8f1956d955128776cd8");
+		map.put("pkey", "d3381ed62cf6b1c9d185abac96ead130");
+		map = Tools.sortMapByKey(map, false);
+		for(Map.Entry<String, String> entry: map.entrySet()) {
+			builder.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), "UTF-8")).append("&");
+		}
+		String httpMethod = "GET";
+		String uri = "/advert/qq/taskMarket";
+		String param = StringUtils.stripEnd(builder.toString(), "&");
+		String str = httpMethod+"&"+URLEncoder.encode(uri, "UTF-8")+"&"+URLEncoder.encode(param, "UTF-8");
+		System.out.println(str);
+		System.out.println(Tools.hmac(str, "ee7e8cdedcd8aab1faaf3300c20f8cff&"));
+	}*/
 	
 }
