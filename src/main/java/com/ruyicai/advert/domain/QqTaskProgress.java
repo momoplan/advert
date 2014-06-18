@@ -37,7 +37,7 @@ public class QqTaskProgress {
 	
 	public static List<QqTaskProgress> findByUsernoStep(String userno, String step) {
 		TypedQuery<QqTaskProgress> q = entityManager().createQuery(
-				"SELECT o FROM QqTaskProgress o where o.mobileid=?", QqTaskProgress.class);
+				"SELECT o FROM QqTaskProgress o where o.userno=? and o.step=?", QqTaskProgress.class);
 		q.setParameter(1, userno).setParameter(2, step);
 		return q.getResultList();
 	}
