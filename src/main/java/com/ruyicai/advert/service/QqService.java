@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -79,9 +78,9 @@ public class QqService {
 			}
 		} else if (StringUtils.equals(cmd, "Check")) { //查询用户是否完成该任务步骤(系统自动扫描时触发)
 			if (StringUtils.equals(step, "2")) { //步骤2
-				checkTask(userno, step);
+				checkTask(userno, 2);
 			} else if (StringUtils.equals(step, "3")) { //步骤3
-				checkTask(userno, step);
+				checkTask(userno, 1);
 			} else {
 				throw new QqException(QqErrorCode.paramError);
 			}
@@ -89,10 +88,10 @@ public class QqService {
 			String award = "";
 			if (StringUtils.equals(step, "2")) { //步骤2
 				award = "200"; //2元彩金
-				checkTask(userno, step);
+				checkTask(userno, 2);
 			} else if (StringUtils.equals(step, "3")) { //步骤3
 				award = "500"; //5元彩金
-				checkTask(userno, step);
+				checkTask(userno, 1);
 			} else {
 				throw new QqException(QqErrorCode.paramError);
 			}
@@ -151,10 +150,16 @@ public class QqService {
 	 * @param userno
 	 * @param step
 	 */
-	private void checkTask(String userno, String step) {
-		List<QqTaskProgress> list = QqTaskProgress.findByUsernoStep(userno, step);
-		if (list==null||list.size()<=0) {
+	private void checkTask(String userno, Integer type) {
+		QqTaskProgress taskProgress = QqTaskProgress.findByUsernoType(userno, type);
+		if (taskProgress==null) {
 			throw new QqException(QqErrorCode.notFinish);
+		}
+		if (type==1) { //购彩金额累积达到100元以上
+			BigDecimal amt = taskProgress.getAmt();
+			if (amt==null||amt.compareTo(new BigDecimal("10000"))==-1) {
+				throw new QqException(QqErrorCode.notFinish);
+			}
 		}
 	}
 	

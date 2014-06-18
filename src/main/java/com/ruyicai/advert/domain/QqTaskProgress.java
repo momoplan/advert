@@ -1,5 +1,6 @@
 package com.ruyicai.advert.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -28,18 +29,25 @@ public class QqTaskProgress {
 	@Column(name = "userno")
 	private String userno;
 	
-	@Column(name = "step")
-	private String step;
+	@Column(name = "type")
+	private Integer type; //1:投注;2:合买
+	
+	@Column(name = "amt")
+	private BigDecimal amt;
 	
 	@Column(name = "createtime")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createtime;
 	
-	public static List<QqTaskProgress> findByUsernoStep(String userno, String step) {
+	public static QqTaskProgress findByUsernoType(String userno, Integer type) {
 		TypedQuery<QqTaskProgress> q = entityManager().createQuery(
-				"SELECT o FROM QqTaskProgress o where o.userno=? and o.step=?", QqTaskProgress.class);
-		q.setParameter(1, userno).setParameter(2, step);
-		return q.getResultList();
+				"SELECT o FROM QqTaskProgress o where o.userno=? and o.type=?", QqTaskProgress.class);
+		q.setParameter(1, userno).setParameter(2, type);
+		List<QqTaskProgress> list = q.getResultList();
+		if (list!=null&&list.size()>0) {
+			return list.get(0);
+		}
+		return null;
 	}
 	
 }

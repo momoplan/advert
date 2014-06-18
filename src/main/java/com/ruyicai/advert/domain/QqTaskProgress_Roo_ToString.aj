@@ -9,9 +9,10 @@ privileged aspect QqTaskProgress_Roo_ToString {
     
     public String QqTaskProgress.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Amt: ").append(getAmt()).append(", ");
         sb.append("Createtime: ").append(getCreatetime()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Step: ").append(getStep()).append(", ");
+        sb.append("Type: ").append(getType()).append(", ");
         sb.append("Userno: ").append(getUserno());
         return sb.toString();
     }

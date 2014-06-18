@@ -31,5 +31,28 @@
 		<property name="connectionFactory" ref="pooledConnectionFactory"></property>
 		<property name="transacted" value="true"></property>
 	</bean>
+	
+	<!-- ***************************lottery jms config*************************** -->
+	<amq:connectionFactory id="jmsLotteryConnectionFactory"
+		brokerURL="${jms.lottery.brokerURL}" />
+		
+	<bean id="pooledLotteryConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+		<property name="maxConnections" value="8" />
+		<property name="maximumActive" value="500" />
+		<property name="connectionFactory" ref="jmsLotteryConnectionFactory" />
+	</bean>
+	
+	<camel:camelContext id="lotteryCamelContext" >
+	</camel:camelContext>
+	
+	<bean id="jmsLotteryCfg" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="pooledLotteryConnectionFactory"></property>
+	</bean>
+	
+	<bean id="jmsLottery" class="org.apache.camel.component.jms.JmsComponent">
+		<constructor-arg type="org.apache.camel.component.jms.JmsConfiguration" ref="jmsLotteryCfg"></constructor-arg>
+		<property name="connectionFactory" ref="pooledLotteryConnectionFactory"></property>
+		<property name="transacted" value="true"></property>
+	</bean>
 
 </beans>

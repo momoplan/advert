@@ -16,6 +16,9 @@ public class RoutesConfiguration {
 	@Resource(name="camelContext")
 	private CamelContext camelContext;
 	
+	@Resource(name = "lotteryCamelContext")
+	private CamelContext lotteryCamelContext;
+	
 	@PostConstruct
 	public void init() {
 		try {
@@ -33,6 +36,22 @@ public class RoutesConfiguration {
 			});
 		} catch (Exception e) {
 			logger.error("advert camel context start failed", e.getMessage());
+			e.printStackTrace();
+		}
+		
+		logger.info("init lottery camel routes");
+		try {
+			lotteryCamelContext.addRoutes(new RouteBuilder() {
+				@Override
+				public void configure() throws Exception {
+					deadLetterChannel("jmsLottery:queue:dead").maximumRedeliveries(-1)
+					.redeliveryDelay(3000);
+					from("jms:queue:VirtualTopicConsumers.advert.actioncenter?concurrentConsumers=20").to(
+							"bean:notifyThirdPartyListener?method=notify").routeId("活动通知");
+				}
+			});
+		} catch (Exception e) {
+			logger.error("lottery camel context start failed", e.getMessage());
 			e.printStackTrace();
 		}
 	}

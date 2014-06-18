@@ -5,6 +5,7 @@ package com.ruyicai.advert.domain;
 
 import java.lang.Integer;
 import java.lang.String;
+import java.math.BigDecimal;
 import java.util.Date;
 
 privileged aspect QqTaskProgress_Roo_JavaBean {
@@ -25,12 +26,20 @@ privileged aspect QqTaskProgress_Roo_JavaBean {
         this.userno = userno;
     }
     
-    public String QqTaskProgress.getStep() {
-        return this.step;
+    public Integer QqTaskProgress.getType() {
+        return this.type;
     }
     
-    public void QqTaskProgress.setStep(String step) {
-        this.step = step;
+    public void QqTaskProgress.setType(Integer type) {
+        this.type = type;
+    }
+    
+    public BigDecimal QqTaskProgress.getAmt() {
+        return this.amt;
+    }
+    
+    public void QqTaskProgress.setAmt(BigDecimal amt) {
+        this.amt = amt;
     }
     
     public Date QqTaskProgress.getCreatetime() {
