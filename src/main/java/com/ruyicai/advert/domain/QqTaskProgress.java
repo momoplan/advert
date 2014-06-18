@@ -39,6 +39,10 @@ public class QqTaskProgress {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createtime;
 	
+	@Column(name = "updatetime")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatetime;
+	
 	public static QqTaskProgress findByUsernoType(String userno, Integer type) {
 		TypedQuery<QqTaskProgress> q = entityManager().createQuery(
 				"SELECT o FROM QqTaskProgress o where o.userno=? and o.type=?", QqTaskProgress.class);

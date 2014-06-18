@@ -54,6 +54,7 @@ public class ActioncenterListener {
 				taskProgress.persist();
 			} else {
 				taskProgress.setAmt(taskProgress.getAmt().add(new BigDecimal(amt)));
+				taskProgress.setUpdatetime(new Date());
 				taskProgress.merge();
 			}
 		} catch (Exception e) {

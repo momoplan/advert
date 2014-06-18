@@ -50,4 +50,12 @@ privileged aspect QqTaskProgress_Roo_JavaBean {
         this.createtime = createtime;
     }
     
+    public Date QqTaskProgress.getUpdatetime() {
+        return this.updatetime;
+    }
+    
+    public void QqTaskProgress.setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
+    }
+    
 }

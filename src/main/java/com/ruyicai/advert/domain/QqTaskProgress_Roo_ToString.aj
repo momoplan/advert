@@ -13,6 +13,7 @@ privileged aspect QqTaskProgress_Roo_ToString {
         sb.append("Createtime: ").append(getCreatetime()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Type: ").append(getType()).append(", ");
+        sb.append("Updatetime: ").append(getUpdatetime()).append(", ");
         sb.append("Userno: ").append(getUserno());
         return sb.toString();
     }
