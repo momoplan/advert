@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -11,11 +12,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruyicai.advert.consts.errorcode.QqErrorCode;
+import com.ruyicai.advert.domain.QqTaskProgress;
 import com.ruyicai.advert.domain.QqUserInfo;
 import com.ruyicai.advert.domain.TaskMarket;
 import com.ruyicai.advert.exception.QqException;
-import com.ruyicai.advert.util.DateParseFormatUtil;
-import com.ruyicai.advert.util.StringUtil;
 import com.ruyicai.advert.util.Tools;
 
 @Service
@@ -70,7 +70,7 @@ public class QqService {
 		String channel = userinfoObject.getString("channel"); //用户渠道号
 		if (StringUtils.equals(cmd, "Award")) { //给用户发放步骤1礼包
 			if (StringUtils.equals(step, "1")) {
-				String award = "100";
+				String award = "100"; //1元彩金
 				//发放奖励
 				taskAward(award, openid, appid, ts, version, contractid, step, payitem, billno, 
 						pkey, sig, userno, channel);
@@ -79,20 +79,20 @@ public class QqService {
 			}
 		} else if (StringUtils.equals(cmd, "Check")) { //查询用户是否完成该任务步骤(系统自动扫描时触发)
 			if (StringUtils.equals(step, "2")) { //步骤2
-				checkTaskStep2(userinfoObject);
+				checkTask(userno, step);
 			} else if (StringUtils.equals(step, "3")) { //步骤3
-				checkTaskStep3(userinfoObject);
+				checkTask(userno, step);
 			} else {
 				throw new QqException(QqErrorCode.paramError);
 			}
 		} else if (StringUtils.equals(cmd, "Check_award")) { //查询用户是否完成步骤,若完成,则给用户发放步骤礼包
 			String award = "";
 			if (StringUtils.equals(step, "2")) { //步骤2
-				award = "100";
-				checkTaskStep2(userinfoObject);
+				award = "200"; //2元彩金
+				checkTask(userno, step);
 			} else if (StringUtils.equals(step, "3")) { //步骤3
-				award = "100";
-				checkTaskStep3(userinfoObject);
+				award = "500"; //5元彩金
+				checkTask(userno, step);
 			} else {
 				throw new QqException(QqErrorCode.paramError);
 			}
@@ -146,36 +146,14 @@ public class QqService {
 		}
 	}
 
-	private void checkTaskStep2(JSONObject userinfoObject) {
-		/*//注册时间
-		String regTime = userinfoObject.getString("regtime");
-		regTime = DateParseFormatUtil.formatDate(regTime, "yyyy-MM-dd");
-		//当前日期
-		String today = DateParseFormatUtil.getPreDayDate(0, "yyyy-MM-dd");
-		if (!StringUtils.equals(regTime, today)) {
-			throw new QqException(QqErrorCode.notFinish);
-		}*/
-	}
-	
 	/**
 	 * 检查任务是否完成
 	 * @param userno
+	 * @param step
 	 */
-	private void checkTaskStep3(JSONObject userinfoObject) {
-		//注册时间
-		String regTime = userinfoObject.getString("regtime");
-		regTime = DateParseFormatUtil.formatDate(regTime, "yyyy-MM-dd");
-		//当前日期
-		String today = DateParseFormatUtil.getPreDayDate(0, "yyyy-MM-dd");
-		if (!StringUtils.equals(regTime, today)) {
-			throw new QqException(QqErrorCode.notFinish);
-		}
-		String mobileId = userinfoObject.getString("mobileid"); //绑定的手机号码
-		String userName = userinfoObject.getString("userName"); //用户名
-		String certId = userinfoObject.getString("certid"); //身份证
-		String name = userinfoObject.getString("name"); //真实姓名
-		if (StringUtil.isBlank(mobileId)||StringUtil.isBlank(userName)
-				||StringUtil.isBlank(certId)||StringUtil.isBlank(name)) {
+	private void checkTask(String userno, String step) {
+		List<QqTaskProgress> list = QqTaskProgress.findByUsernoStep(userno, step);
+		if (list==null||list.size()<=0) {
 			throw new QqException(QqErrorCode.notFinish);
 		}
 	}
