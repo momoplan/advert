@@ -47,7 +47,7 @@ public class RoutesConfiguration {
 					deadLetterChannel("jmsLottery:queue:dead").maximumRedeliveries(-1)
 					.redeliveryDelay(3000);
 					from("jms:queue:VirtualTopicConsumers.advert.actioncenter?concurrentConsumers=20").to(
-							"bean:notifyThirdPartyListener?method=notify").routeId("活动通知");
+							"bean:actioncenterListener?method=process").routeId("活动通知");
 				}
 			});
 		} catch (Exception e) {
