@@ -16,8 +16,8 @@ public class RoutesConfiguration {
 	@Resource(name="camelContext")
 	private CamelContext camelContext;
 	
-	@Resource(name = "lotteryCamelContext")
-	private CamelContext lotteryCamelContext;
+	/*@Resource(name = "lotteryCamelContext")
+	private CamelContext lotteryCamelContext;*/
 	
 	@PostConstruct
 	public void init() {
@@ -39,7 +39,7 @@ public class RoutesConfiguration {
 			e.printStackTrace();
 		}
 		
-		logger.info("init lottery camel routes");
+		/*logger.info("init lottery camel routes");
 		try {
 			lotteryCamelContext.addRoutes(new RouteBuilder() {
 				@Override
@@ -53,6 +53,6 @@ public class RoutesConfiguration {
 		} catch (Exception e) {
 			logger.error("lottery camel context start failed", e.getMessage());
 			e.printStackTrace();
-		}
+		}*/
 	}
 }
