@@ -76,7 +76,7 @@ public class CommonService {
 			}
 			UserInf userInf = list.get(0);
 			String channel = userInf.getChannel();
-			if (!StringUtils.equals(channel, "887")) {
+			if (!StringUtils.equals(channel, "889")) {
 				return;
 			}
 			Date createtime = userInf.getCreatetime();
@@ -102,7 +102,7 @@ public class CommonService {
 			}
 			for (TregisterInfo tregisterInfo : list) {
 				String channel = tregisterInfo.getChannel();
-				if (!StringUtils.equals(channel, "887")) {
+				if (!StringUtils.equals(channel, "889")) {
 					continue;
 				}
 				Date createtime = tregisterInfo.getCreatetime();
