@@ -44,6 +44,10 @@ public class NotifyThirdPartyListener {
 				if (StringUtils.equals(source, AdvertiseSource.ruanlie.value())) { //按激活算的
 					return;
 				}
+				
+				if (StringUtils.equals(source, AdvertiseSource.mopan.value())) // 按首次充值算的
+					return;
+				
 				//通知第三方积分墙
 				AdvertiseInfo advertiseInfo = advertiseUtil.getValidAdvertiseInfo(mac, source);
 				advertiseUtil.notifyThirdParty(advertiseInfo);
@@ -56,6 +60,10 @@ public class NotifyThirdPartyListener {
 				if (StringUtils.equals(source, AdvertiseSource.ruanlie.value())) { //按激活算的
 					return;
 				}
+				
+				if (StringUtils.equals(source, AdvertiseSource.mopan.value())) // 按首次充值算的
+					return;
+				
 				advertiseUtil.notifyThirdParty(advertiseInfo); //通知第三方
 			}
 			long endMillis = System.currentTimeMillis();

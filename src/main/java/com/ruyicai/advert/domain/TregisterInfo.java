@@ -60,4 +60,11 @@ public class TregisterInfo {
 		return q.getResultList();
 	}
 	
+	public static List<TregisterInfo> findByUserno(String userno) {
+		TypedQuery<TregisterInfo> q = entityManager().createQuery(
+				"SELECT o FROM TregisterInfo o where o.userno=?", TregisterInfo.class);
+		q.setParameter(1, userno);
+		return q.getResultList();
+	}
+	
 }

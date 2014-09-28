@@ -16,8 +16,8 @@ public class RoutesConfiguration {
 	@Resource(name="camelContext")
 	private CamelContext camelContext;
 	
-	/*@Resource(name = "lotteryCamelContext")
-	private CamelContext lotteryCamelContext;*/
+	@Resource(name = "lotteryCamelContext")
+	private CamelContext lotteryCamelContext;
 	
 	@PostConstruct
 	public void init() {
@@ -39,7 +39,7 @@ public class RoutesConfiguration {
 			e.printStackTrace();
 		}
 		
-		/*logger.info("init lottery camel routes");
+		logger.info("init lottery camel routes");
 		try {
 			lotteryCamelContext.addRoutes(new RouteBuilder() {
 				@Override
@@ -47,12 +47,12 @@ public class RoutesConfiguration {
 					deadLetterChannel("jmsLottery:queue:dead").maximumRedeliveries(-1)
 					.redeliveryDelay(3000);
 					from("jmsLottery:queue:VirtualTopicConsumers.advert.actioncenter?concurrentConsumers=20").to(
-							"bean:actioncenterListener?method=process").routeId("活动通知");
+							"bean:actioncenterListener?method=process").routeId("用户充值或购彩通知");
 				}
 			});
 		} catch (Exception e) {
 			logger.error("lottery camel context start failed", e.getMessage());
 			e.printStackTrace();
-		}*/
+		}
 	}
 }
