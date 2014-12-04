@@ -59,11 +59,16 @@ public class ActioncenterListener {
 			}*/
 			if (type == 1) // 暂时只对用户充值行为进行处理
 			{
+				if (StringUtils.isBlank(userno))
+					return;
+				
 				List<TregisterInfo> tregisterInfoList = TregisterInfo.findByUserno(userno);
 				if (tregisterInfoList == null || tregisterInfoList.size() == 0)
 					return;
 				
 				TregisterInfo tregisterInfo = tregisterInfoList.get(0);
+				if (!StringUtils.equals(tregisterInfo.getPlatform(), Platform.iPhone.value()))
+					return;
 				
 				List<UserInf> list = UserInf.getListByMacPlatform(tregisterInfo.getMac(), Platform.iPhone.value());
 				if (list == null || list.size() == 0)
@@ -71,11 +76,12 @@ public class ActioncenterListener {
 				
 				UserInf userInf = list.get(0);
 				String source = AdvertiseSource.getSourceByCoopId(userInf.getChannel());
-				if (StringUtil.isEmpty(source)) { //通过其他渠道激活
+				if (StringUtil.isEmpty(source))//通过其他渠道激活
 					return;
-				}
 				
-				if (!StringUtils.equals(source, AdvertiseSource.mopan.value()))
+				// 按首次充值算
+				if (!StringUtils.equals(source, AdvertiseSource.mopan.value())
+						&& !StringUtils.equals(source, AdvertiseSource.yijifen.value()))
 					return;
 				
 				//通知第三方积分墙

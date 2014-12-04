@@ -45,7 +45,8 @@ public class NotifyThirdPartyListener {
 					return;
 				}
 				
-				if (StringUtils.equals(source, AdvertiseSource.mopan.value())) // 按首次充值算的
+				if (StringUtils.equals(source, AdvertiseSource.mopan.value())
+						|| StringUtils.equals(source, AdvertiseSource.yijifen.value())) // 按首次充值算的
 					return;
 				
 				//通知第三方积分墙
@@ -61,7 +62,8 @@ public class NotifyThirdPartyListener {
 					return;
 				}
 				
-				if (StringUtils.equals(source, AdvertiseSource.mopan.value())) // 按首次充值算的
+				if (StringUtils.equals(source, AdvertiseSource.mopan.value())
+						|| StringUtils.equals(source, AdvertiseSource.yijifen.value())) // 按首次充值算的
 					return;
 				
 				advertiseUtil.notifyThirdParty(advertiseInfo); //通知第三方
