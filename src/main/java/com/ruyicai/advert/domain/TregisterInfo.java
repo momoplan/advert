@@ -60,9 +60,9 @@ public class TregisterInfo {
 		return q.getResultList();
 	}
 	
-	public static List<TregisterInfo> findByUserno(String userno) {
+	public static List<TregisterInfo> findRegisterInfoByUserno(String userno) {
 		TypedQuery<TregisterInfo> q = entityManager().createQuery(
-				"SELECT o FROM TregisterInfo o where o.userno=?", TregisterInfo.class);
+				"SELECT o FROM TregisterInfo o where o.createtime is not null and o.userno=?", TregisterInfo.class);
 		q.setParameter(1, userno);
 		return q.getResultList();
 	}

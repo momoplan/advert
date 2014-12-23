@@ -62,7 +62,8 @@ public class ActioncenterListener {
 				if (StringUtils.isBlank(userno))
 					return;
 				
-				List<TregisterInfo> tregisterInfoList = TregisterInfo.findByUserno(userno);
+				// 按注册平台及充值来算,即要求用户是哪个平台注册的，就按哪个来算充值
+				List<TregisterInfo> tregisterInfoList = TregisterInfo.findRegisterInfoByUserno(userno);
 				if (tregisterInfoList == null || tregisterInfoList.size() == 0)
 					return;
 				
